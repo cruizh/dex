@@ -1,0 +1,300 @@
+#+TITLE: Diseño de Experimentos
+#+AUTHOR: Carlos José Ruiz-Henestrosa Ruiz
+#+DATE: 2020
+#+OPTIONS: toc:4
+#+HTML_MATHJAX: path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+#+HTML_HEAD_EXTRA: <script src="mathjax_config.js"></script>
+#+LATEX_HEADER: \usepackage{physics,amsmath,amssymb}
+#+LATEX_HEADER+: \renewcommand{\ev}[1]{\operatorname{\mathbb{E}}\left[ #1 \right]}
+#+LATEX_HEADER+: \renewcommand{\ev}[1]{\operatorname{\mathbb{E}}\left[ #1 \right]}
+#+LATEX_HEADER+: \renewcommand{\var}[1]{\operatorname{Var}\left( #1 \right)}
+#+LATEX_HEADER+: \newcommand{\cov}[2]{\operatorname{Cov}\left( #1,\, #2 \right)}
+
+* Prólogo
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+Estos apuntes se basan principalmente en los apuntes de la profesora de la asignatura cite:DEx, así como en los libros cite:Montgomery2017 y cite:Toutenburg2009.
+
+Para la versión HTML, el tema usado es [[github:fniessen/org-html-themes#ReadTheOrg][ReadTheOrg]].
+
+* Introducción
+
+** Introducción al diseño experimental
+Comenzamos con varias definiciones:
+
+- Experimento :: prueba o ensayo.
+- Experimento diseñado :: prueba o serie de pruebas en las que se introducen cambios deliberados en las variables de entrada de un proceso o sistema, de manera que sea posible observar o identificar las causas de los cambios en la respuesta de salida.
+- Diseño estadístico de experimentos ::
+
+Como notación, llamaremos \(X_{i}\) a las variables controlables del proceso, y \(Z_{i}\) a las variables incontrolables en el contexto del experimento.
+
+** Diseño estadístico de experimentos
+El *diseño estadístico de experimentos* es el proceso de planificación de un experimento para obtener datos que puedan ser analizados mediante métodos estadísticos.
+
+Algunos conceptos básicos son los siguientes:
+
+- Factor :: variable cuyo efecto experimental debe ser medido. Generalmente suele ser de tipo "factor", i.e. toma valores en un conjunto finito.
+- Nivel o tratamiento :: Estados o modalidades del factor.
+- Unidad experimental :: elemento del experimento sobre el que se aplica un tratamiento.
+- Bloque :: grupo de unidades experimentales homogéneas respecto de un determinado factor.
+- Replicación :: repetición del experimento bajo las mismas condiciones de las fuentes de variación controladas. Permite estimar la variabilidad muestral.
+- Aleatorización :: asignación aleatoria de material experimental o del orden en que se realizan las pruebas.
+
+** Clasificación de los diseños
+Los diseños de varios factores se clasifican en diseños de clasificación cruzada y diseños anidados:
+
+- Diseños cruzados :: diseños en los que los niveles de los factores son combinados o cruzados, y pueden ser aplicados simultáneamente. Los hay /completos/, en los que hay al menos una observación de cada combinación de niveles de todos los factores, e /incompletos/, en los que faltan observaciones.
+- Diseños anidados :: diseños en los que carece de sentido cruzar los factores, ya que los niveles de un factor pueden variar dentro de los niveles del otro.
+
+** Inferencia en Modelos Lineales
+
+Nos centraremos en el estudio de modelos lineales, que son aquellos en los que una observación \(y\) puede ser representada mediante
+
+#+NAME: eq:lm
+\begin{equation}
+y = \sum_{i=1}^{p} x_{i} \beta_{i} + \varepsilon
+\end{equation}
+
+donde
+- \(x_{i}\) representan los valores conocidos
+- \(\beta_{i}\) representan coeficientes desconocidos
+- \(\varepsilon\) es el error aleatorio
+
+Si tenemos más de una observación, \(y_{1}, \dots, y_{n}\), tendremos \(x_{i1},\dots,x_{ip}\) para cada observación, y podemos expresar la ecuación matricialmente:
+
+#+NAME: eq:lm-matrix
+\begin{equation}
+Y = X \beta + \varepsilon
+\end{equation}
+
+donde
+- \(Y = \begin{pmatrix} y_{1} & \dots & y_{n} \end{pmatrix}^t\) es el vector compuesto por las observaciones.
+- \(X\) es una matriz \(n \times p\) de constantes conocidas.
+- \(\beta\) es un vector de parámetros de dimensión \(p\).
+- \(\varepsilon\) es un vector de errores aleatorios de dimensión \(n\).
+
+Llamamos *matriz del diseño* a \(X \in \mathcal{M}_{n \times p}(\mathbb{R})\). En los modelos asociados al diseño de experimentos, se tendrá \(x_{ij} \in \{0,1\}\) (porque codificaremos los factores utilizando [[https://en.wikipedia.org/wiki/Dummy_variable_(statistics)][variables /dummy/]]).
+
+En el modelo, \(\beta \in \mathbb{R}^{p}\). El objetivo se centrará en estimar sus componentes (o funciones de las mismas) y realizar contrastes sobre ellas.
+
+El modelo es /lineal/ porque cada observación es expresada como combinación lineal de los parámetros \(\beta_{j}\). No importa que sea o no combinación lineal de las \(x_{i}\).
+
+*** Hipótesis del modelo
+En el modelo lineal la observación \(i\)-ésima consta de dos componentes:
+- \(\hat{y}_{i} = \sum_{j=1}^{p} x_{ij} \beta{j}\)
+- \(\varepsilon_{i}\), el error en la \(i\)-ésima observación
+
+Supondremos que los errores \(\varepsilon_{i}\) son variables aleatorias que satisfacen las siguientes hipótesis:
+1. <<insesgado>>Tienen media 0, \(\ev{\varepsilon_{i}} = 0 \ \forall i\), y por tanto \(\ev{Y} = X \beta\), i.e. la estimación es insesgada.
+2. <<incorrelado>>Están incorrelados, i.e. \(\ev{\varepsilon_{i} \varepsilon_{j}} = 0 \ \forall i \neq j\). Equivalentemente, la covarianza entre dos errores distintos es nula.
+3. <<homocedasticidad>> /Hipótesis de homocedasticidad/: todos tienen la misma varianza \(\var{\varepsilon_{i}} = \sigma^2 \in \mathbb{R}^{+} \ \forall i\).
+
+De [[incorrelado]] y [[homocedasticidad]] se obtiene que \(\var{Y} = \var{\varepsilon} = \sigma^{2} I_{n}\).
+
+*** Propiedades de los vectores aleatorios
+Si \(Y\) es un vector aleatorio, se cumplen las siguientes propiedades:
+- \(\ev{Y}\) es un vector cuya \(i\)-ésima componente es \(\ev{y_{i}}\).
+- La esperanza es un operador lineal, i.e. \(\ev{AY + b} = A \ev{Y} + b\) para toda matriz \(A\) y vector \(b\) compatibles.
+- \(\var{Y}\) es una matriz simétrica semidefinida positiva, con \(v_{ij} = \cov{y_{i}}{y_{j}}\).
+- \(\var{AY} = A \var{Y} A^t\)
+- \(\cov{AY}{BZ} = A \cov{Y}{Z} B^t\)
+- \(\cov{Y}{Z} = \ev{YZ^t} - \ev{Y} \ev{Z}^t\)
+
+*** Método de mínimos cuadrados
+
+Para estimar \(\beta\) utilizaremos el método de mínimos cuadrados, que consiste en tomar \(\hat{\beta}\) de modo que se minimice la suma de cuadrados de los residuos, definidos como sigue: dado un vector de estimadores \(\hat{\beta}\), llamamos \(\hat{y}_i\) al estimador de \(\ev{y_i}\): \(\hat{y}_i = \sum_{j=1}^{p} x_{ij} \hat{\beta}_{j}\), y definimos el residuo como \(e_i = y_i - \hat{y}_i\).
+
+Este método minimiza \(\sum_{i=1}^{n} e_{i}^{2}\), cuya solución constituye lo que se denomina el *Sistema de Ecuaciones Normales*:
+
+#+NAME: eq:lm-sen
+\begin{equation}
+\tag{SEN}
+X^t Y = X^t X \hat{\beta}
+\end{equation}
+
+Veamos cómo se obtiene:
+#+BEGIN_proof
+En primer lugar, observamos que podemos reescribir la función objetivo.
+
+\[S(\beta) := \sum_{i=1}^{n} e_{i}^{2} = e^t e = \left(Y - X \beta \right)^t \left(Y - X \beta \right)\]
+
+El mínimo existe porque  \(S(\beta)\) es una función diferenciable convexa (una [[https://en.wikipedia.org/wiki/Quadratic_form_(statistics)][forma cuadrática]]). Podemos reescribir
+
+\begin{align*}
+S(\beta)
+&= Y^t Y + \beta^t X^t X \beta - Y^t X \beta \phantom{\big(\big)^t}-\beta^t X^t Y \\
+&= Y^t Y + \beta^t X^t X \beta - \left(Y^t X \beta\right)^t - \beta^t X^t Y \\
+&= Y^t Y + \beta^t X^t X \beta - 2 \beta^t X^t Y
+\end{align*}
+
+donde hemos podido trasponer porque todas las "matrices" son en realidad escalares (y por tanto son matrices simétricas).
+
+El mínimo se encontrará en el punto que anule el gradiente, por lo que derivamos respecto de \(\beta\):
+
+\[
+\frac{\partial S(\beta)}{\partial \beta} = 0 + 2 X^t X \beta - 2 X^t Y
+\]
+
+Eseto se obtiene de que \(\frac{\partial}{\partial X} X^t A X = 2 A X\) y \(\frac{\partial}{\partial X} a^t X = a\).
+
+Por tanto el mínimo se alcanza en la solución de la ecuación
+
+\[
+\frac{\partial S(\beta)}{\partial \beta} = 0
+\]
+
+que es equivalente a [[eq:lm-sen]].
+#+END_proof
+
+La matriz \(X^t X\) es una matriz \(p \times p\) simétrica semidefinida positiva con el mismo rango que \(X\). Supondremos que \(n \geq p\), y por tanto el rango de \(X\) es el número de columnas de \(X\) que son linealmente independientes, i.e. el número de variables explicativas independientes.
+
+**** Caso de rango total
+Este es el caso usual en los modelos de regresión múltiple, pero apenas se da en los modelos de diseño de experimentos. Se da como introducción, pues su solución ayuda a calcular la del otro caso. Si las \(p\) columnas de \(X\) son independientes, entonces \(\rank(X) = \rank(X^t X) = p\), luego \(X^t X\) es invertible y [[eq:lm-sen]] tiene solución única, dada por
+
+\[ \hat{\beta} = \left(X^t X \right)^{-1} X^t Y \]
+
+El estimador obtenido es insesgado, y su varianza es \(\var{\hat{\beta}} = \sigma^2 \left(X^t X \right)^{-1}\).
+
+#+BEGIN_proof
+\begin{align*}
+\var{\hat{\beta}}
+&= V \left( \left( X^t X\right)^{-1} X^t Y \right) \\
+&= \left( X^t X\right)^{-1} X^t\ \var{Y}\ X \left( \left(X^t X \right)^{-1} \right)^{t}\\
+&= \left( X^t X\right)^{-1} X^t\ \var{X\beta + \varepsilon}\ X \left(X^t X \right)^{-1}\\
+&= \left( X^t X\right)^{-1} X^t\ \var{\varepsilon}\ X \left(X^t X \right)^{-1}\\
+&= \left( X^t X\right)^{-1} X^t\ \sigma^2 I_{n}\ X \left(X^t X \right)^{-1}\\
+&= \sigma^2 \left( X^t X\right)^{-1} X^t X \left(X^t X \right)^{-1}\\
+&= \sigma^2 \left( X^t X\right)^{-1}
+\end{align*}
+#+END_proof
+
+**** Caso singular
+Este es el caso que se dará más en diseño de experimentos. Sea \(r < p\) el rango de \(X\). Entonces \(X^t X\) es singular y no existe su inversa. Para determinar las posibles soluciones utilizaremos el concepto de inversa generalizada de una matriz.
+
+***** Inversa generalizada
+Sea \(A\) una matriz \(n \times m\). Diremos que \(A^{-}\) es una inversa generalizada de \(A\) si
+\[A A^{-} A = A\]
+
+****** Propiedades
+- \(\rank(A^{-}) \geq \rank(A)\).
+- \(A A^{-}\) es una matriz idempotente con \(\rank(A) = \rank(A A^{-})) = \trace(AA^{-})\).
+- \(A^{-} A\) es una matriz idempotente con \(\rank(A) = \rank(A^{-} A)) = \trace(A^{-} A)\).
+- \(P \coloneqq X \left(X^t X \right)^{-} X^t\) es una matriz idempotente con \(\rank(P) = \rank(X)\), \(PX = X\) y es única para toda inversa generalizada de \(X^t X\).
+  Es fácil (cuestión de cálculo) comprobar la idempotencia y \(PX = X\).
+  La igualdad de rangos es fácil por las propiedades del rango del producto.
+  Veamos que es única. Seguiremos la prueba de cite:Toutenburg2009 (p. 539, Theorem A.42):
+
+  #+BEGIN_proof
+  En primer lugar consideremos una matriz simétrica \(A\) y
+  dos vectores \(a\) y \(b\) del [[https://en.wikipedia.org/wiki/Row_and_column_spaces][espacio de columnas]] de \(A\),
+  i.e. el espacio generado por las columnas de \(A\).
+  Entonces la forma bilineal \(a^t A^{-} b\) es invariante respecto a la elección de \(A^{-}\).
+  Veámoslo: como \(a\) y \(b\) forman parte del espacio de columnas de \(A\),
+  existen vectores \(c\) y \(d\) tales que \(a = Ac\) y \(b = Ad\).
+  Entonces
+
+  \begin{align*}
+    a^t A^{-} b
+    &= c^t A^t A^{-} A d \\
+    &= c^t A d
+  \end{align*}
+
+  Esta expresión no depende de \(A^{-}\).
+
+  Si consideremos la representación por filas de \(X = \begin{pmatrix} x_{1\cdot}^t & \dots & x_{n \cdot}^t \end{pmatrix}^t\). Entonces
+
+  \[
+    P = X \left(X^t X \right)^{-} X^t = \left( x_{i \cdot}^t \left(X^t X\right)^{-} x_{j \cdot} \right)_{ij}
+  \]
+
+  y como \(\left(X^t X \right)\) es simétrica, todas las formas bilineales de esta expresión de \(P\) son únicas para todas las inversas generalizadas de \(\left(X^t X\right)\), y por tanto \(P\) también lo es.
+  #+END_proof
+
+  #+BEGIN_note
+  \(P\) es la matriz proyección sobre el espacio vectorial generado por las columnas de \(X\), y no depende de la base elegida para el espacio vectorial.
+  #+END_note
+
+****** Aplicación a la resolución de ecuaciones lineales
+Consideremos el sistema de ecuaciones \(AX = B\), donde \(A_{n \times m}\) y \(B_{n \times q}\) son matrices conocidas y \(X_{m \times q}\) es una matriz de incógnitas. Entonces el sistema es compatible si y solo si \(B = A A^{-} B\), para cualquier \(A^{-}\) (da igual). Esta prueba viene en cite:Toutenburg2009 (p. 48, Theorem 3.1).
+
+Supongamos que el sistema es compatible, entonces
+
+1. Si \(A^{-}\) es una inversa generalizada de \(A\), entonces \(X = A^{-} B\) es una solución.
+
+   #+BEGIN_proof
+   Si \(X = A^{-} B\), entonces \(AX = A A^{-} B = B\) por la propiedad anterior.
+   #+END_proof
+
+2. Si \(A^{-}\) es una inversa generalizada de \(A\), entonces la solución general viene dada por
+   \[ X = A^{-} B + \left(I - A^{-} A \right) Z \]
+   con \(Z\) arbitraria. Esta prueba viene también en cite:Toutenburg2009 (p. 48, (3.13) y p. 555, B.1).
+
+***** TODO Solución
+El [[eq:lm-sen][sistema de ecuaciones normales]] es compatible y la solución general del mismo viene dada por
+
+\[
+\tilde{\beta} = \left(X^t X \right)^{-} X^t Y + \left(I - H \right) Z
+\]
+donde \(H = \left(X^t X\right)^{-} \left(X^t X\right)\) y \(Z \in \mathbb{R}^{p}\) es un vector arbitrario.
+
+#+BEGIN_proof
+Veamos en primer lugar que el sistema es compatible. Para ello hay que ver que
+\[X^t Y = \left(X^t X \right) \left(X^t X \right)^{-} X^t Y\]
+y efectivamente,
+
+\begin{align*}
+\left(X^t X \right) \left(X^t X \right)^{-} X^t Y
+&= X^t X \left(X^t X \right)^{-} X^t Y \\
+&= X^t P Y \\
+&= X^t P^t Y \\
+&= X^t Y
+\end{align*}
+
+El último paso se obtiene trasponiendo en la igualdad \(PX = X\).
+Una vez demostrado que el sistema es compatible, la solución general viene dada por la fórmula anterior.
+#+END_proof
+
+\(X \tilde{\beta}\) es única para toda \(\tilde{\beta}\) solución del [[eq:lm-sen]].
+
+*** TODO Funciones linealmente estimables
+Decimos que un parámetro o función de parámetros es *linealmente estimable* (abreviaremos /l.e./) si existe una combinación lineal de las observaciones cuyo valor esperado es el parámetro o función de parámetros.
+
+#+BEGIN_note
+\(\lambda^t \beta\) es linealmente estimable si y solo si existe \(c\) tal que \(\lambda = X^t c\).
+Esto es fácil de ver ya que el valor esperado de una combinación lineal de las observaciones es \(\ev{c^t Y} = c^t X \beta\),
+por lo que para que sea linealmente estimable es necesario y suficiente que \(\lambda^t = c^t X\).
+#+END_note
+
+#+BEGIN_note
+Una consecuencia inmediata es que el conjunto de funciones lineales de \(\beta\) linealmente estimables forman un espacio vectorial cuya dimensión es igual al rango de \(X\).
+#+END_note
+
+Otra propiedad es la siguiente: \(\lambda^t \beta\) es linealmente estimable si y solo si \(\lambda^t = \lambda^t H\), con \(H = \left(X^t X\right)^{-} \left(X^t X \right)\).
+
+Si \(\lambda^t \beta\) es una función /l.e./ y \(\tilde{\beta}\) es una solución del [[eq:lm-sen]], entonces \(\lambda^t \tilde{\beta}\) es un estimador insesgado de \(\lambda^t \beta\) y además es único para toda \(\tilde{\beta}\) solución del [[eq:lm-sen]].
+
+*** TODO Descomposición de la variabilidad
+*** TODO Distribución e independencia de formas cuadráticas
+*** TODO Teoría normal en el Modelo Lineal
+
+* TODO Experimentos con un factor
+
+* TODO Experimentos con 2 factores
+
+* TODO Experimentos multifactoriales
+
+* TODO Diseños en bloques
+
+* TODO Análisis de la covarianza
+
+* Bibliografía
+<<bibliographystyle link>>
+bibliographystyle:plain
+
+<<bibliography link>>
+bibliography:dex.bib
+
+# Local Variables:
+# eval: (latex-math-mode 1)
+# End:
