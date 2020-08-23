@@ -15,4 +15,7 @@
     (unless (package-installed-p pkg)
       (package-install pkg))))
 
+(pushnew org-link-abbrev-alist
+         '("github" . "https://github.com/%s"))
+
 ;;; init.el ends here
