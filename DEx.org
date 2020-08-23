@@ -2,6 +2,7 @@
 #+AUTHOR: Carlos José Ruiz-Henestrosa Ruiz
 #+DATE: 2020
 #+OPTIONS: toc:4
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
 #+HTML_MATHJAX: path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 #+HTML_HEAD_EXTRA: <script src="mathjax_config.js"></script>
 #+LATEX_HEADER: \usepackage{physics,amsmath,amssymb}
@@ -16,7 +17,7 @@
 :END:
 Estos apuntes se basan principalmente en los apuntes de la profesora de la asignatura cite:DEx, así como en los libros cite:Montgomery2017 y cite:Toutenburg2009.
 
-Para la versión HTML, el tema usado es [[github:fniessen/org-html-themes#ReadTheOrg][ReadTheOrg]].
+Para la versión HTML, se utiliza [[github:fniessen/org-html-themes#readtheorg][ReadTheOrg]].
 
 * Introducción
 

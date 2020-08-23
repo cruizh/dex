@@ -17,7 +17,7 @@ jobs:
         version: 27.1
 
     - name: Build HTML
-      run: emacs --batch --quick --load=init.el "--eval=(find-file \"DEx.org\")" --funcall=org-twbs-export-to-html
+      run: emacs --batch --quick --load=init.el "--eval=(find-file \"DEx.org\")" --funcall=org-html-export-to-html
     
     - name: Set up GitHub page
       run: |

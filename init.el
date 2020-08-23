@@ -10,14 +10,13 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
-(let ((needed-packages '(ox-twbs org-ref)))
+(let ((needed-packages '(org-ref)))
   (dolist (pkg needed-packages)
     (unless (package-installed-p pkg)
       (package-install pkg))))
 
 (require 'org)
 (require 'org-ref)
-(require 'ox-twbs)
 
 (defun latex-math-mode (a) nil)
 
