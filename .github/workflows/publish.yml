@@ -20,7 +20,7 @@ jobs:
       run: emacs --quick --script init.el
 
     - name: Build HTML
-      run: emacs --quick --eval='(find-file "DEx.org")' --funcall=ox-twbs-export-to-html
+      run: emacs --batch --quick "--eval=(require 'ox-twbs)" "--eval=(find-file \"DEx.org\")" --funcall=ox-twbs-export-to-html
     
     - name: Set up GitHub page
       run: |
