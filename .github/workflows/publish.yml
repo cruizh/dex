@@ -28,7 +28,7 @@ jobs:
         cp -t out DEx.html mathjax_config.js
       
     - name: Deploy
-      uses: crzy-max/ghaction-github-pages@v2.1.2
+      uses: crazy-max/ghaction-github-pages@v2.1.2
       with:
         build_dir: out
       env:
