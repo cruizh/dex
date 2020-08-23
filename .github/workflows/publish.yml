@@ -16,16 +16,14 @@ jobs:
       with:
         version: 27.1
 
-    - name: Install dependencies
-      run: emacs --quick --script init.el
-
     - name: Build HTML
-      run: emacs --batch --quick "--eval=(require 'ox-twbs)" "--eval=(find-file \"DEx.org\")" --funcall=ox-twbs-export-to-html
+      run: emacs --batch --quick --load=init.el "--eval=(find-file \"DEx.org\")" --funcall=org-twbs-export-to-html
     
     - name: Set up GitHub page
       run: |
         mkdir -p out
-        cp -t out DEx.html mathjax_config.js
+        cp DEx.html out/index.html
+        cp -t out mathjax_config.js
       
     - name: Deploy
       uses: crazy-max/ghaction-github-pages@v2.1.2

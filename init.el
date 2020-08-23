@@ -15,7 +15,12 @@
     (unless (package-installed-p pkg)
       (package-install pkg))))
 
-(pushnew org-link-abbrev-alist
-         '("github" . "https://github.com/%s"))
+(require 'org)
+(require 'ox-twbs)
+
+(defun latex-math-mode (a) nil)
+
+(cl-pushnew '("github" . "https://github.com/%s")
+         org-link-abbrev-alist)
 
 ;;; init.el ends here
