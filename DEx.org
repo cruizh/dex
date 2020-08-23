@@ -2,7 +2,7 @@
 #+AUTHOR: Carlos José Ruiz-Henestrosa Ruiz
 #+DATE: 2020
 #+OPTIONS: toc:4
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
+#+SETUPFILE: https://cruizh.github.io/org-html-themes/setup/theme-readtheorg.setup
 #+HTML_MATHJAX: path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 #+HTML_HEAD_EXTRA: <script src="mathjax_config.js"></script>
 #+LATEX_HEADER: \usepackage{physics,amsmath,amssymb}
