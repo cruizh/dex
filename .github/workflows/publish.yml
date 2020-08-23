@@ -1,0 +1,35 @@
+name: Publish
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - uses: purcell/setup-emacs@v2.0
+      with:
+        version: 27.1
+
+    - name: Install dependencies
+      run: emacs --quick --script init.el
+
+    - name: Build HTML
+      run: emacs --quick --eval='(find-file "DEx.org")' --funcall=ox-twbs-export-to-html
+    
+    - name: Set up GitHub page
+      run: |
+        mkdir -p out
+        cp -t out DEx.html mathjax_config.js
+      
+    - name: Deploy
+      uses: crzy-max/ghaction-github-pages@v2.1.2
+      with:
+        build_dir: out
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
