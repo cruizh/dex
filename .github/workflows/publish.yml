@@ -23,7 +23,7 @@ jobs:
       run: |
         mkdir -p out
         cp DEx.html out/index.html
-        cp -t out mathjax_config.js
+        cp -t out mathjax_config.js theorems_es.css
       
     - name: Deploy
       uses: crazy-max/ghaction-github-pages@v2.1.2

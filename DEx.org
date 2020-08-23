@@ -5,6 +5,7 @@
 #+SETUPFILE: https://cruizh.github.io/org-html-themes/setup/theme-readtheorg.setup
 #+HTML_MATHJAX: path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 #+HTML_HEAD_EXTRA: <script src="mathjax_config.js"></script>
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="theorems_es.css">
 #+LATEX_HEADER: \usepackage{physics,amsmath,amssymb}
 #+LATEX_HEADER+: \renewcommand{\ev}[1]{\operatorname{\mathbb{E}}\left[ #1 \right]}
 #+LATEX_HEADER+: \renewcommand{\ev}[1]{\operatorname{\mathbb{E}}\left[ #1 \right]}
