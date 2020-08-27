@@ -2,15 +2,12 @@
 #+AUTHOR: Carlos José Ruiz-Henestrosa Ruiz
 #+DATE: 2020
 #+OPTIONS: toc:4
+#+STARTUP: latexpreview
 #+SETUPFILE: https://cruizh.github.io/org-html-themes/setup/theme-readtheorg.setup
 #+HTML_MATHJAX: path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 #+HTML_HEAD_EXTRA: <script src="mathjax_config.js"></script>
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="theorems_es.css">
-#+LATEX_HEADER: \usepackage{physics,amsmath,amssymb}
-#+LATEX_HEADER+: \renewcommand{\ev}[1]{\operatorname{\mathbb{E}}\left[ #1 \right]}
-#+LATEX_HEADER+: \renewcommand{\ev}[1]{\operatorname{\mathbb{E}}\left[ #1 \right]}
-#+LATEX_HEADER+: \renewcommand{\var}[1]{\operatorname{Var}\left( #1 \right)}
-#+LATEX_HEADER+: \newcommand{\cov}[2]{\operatorname{Cov}\left( #1,\, #2 \right)}
+#+LATEX_HEADER: \include{header}
 
 * Prólogo
 :PROPERTIES:
@@ -259,7 +256,7 @@ Una vez demostrado que el sistema es compatible, la solución general viene dada
 
 \(X \tilde{\beta}\) es única para toda \(\tilde{\beta}\) solución del [[eq:lm-sen]].
 
-*** TODO Funciones linealmente estimables
+*** Funciones linealmente estimables
 Decimos que un parámetro o función de parámetros es *linealmente estimable* (abreviaremos /l.e./) si existe una combinación lineal de las observaciones cuyo valor esperado es el parámetro o función de parámetros.
 
 #+BEGIN_note
@@ -276,9 +273,359 @@ Otra propiedad es la siguiente: \(\lambda^t \beta\) es linealmente estimable si 
 
 Si \(\lambda^t \beta\) es una función /l.e./ y \(\tilde{\beta}\) es una solución del [[eq:lm-sen]], entonces \(\lambda^t \tilde{\beta}\) es un estimador insesgado de \(\lambda^t \beta\) y además es único para toda \(\tilde{\beta}\) solución del [[eq:lm-sen]].
 
-*** TODO Descomposición de la variabilidad
+**** Varianza y covarianza de las funciones linealmente estimables
+Sea \(\lambda^t \beta\) una función linealmente estimable. Se tiene que
+
+\[
+    \var{\lambda^t \tilde{\beta}} = \sigma^2 \lambda^t \left(X^t X\right)^{-} \lambda
+\]
+
+Sean \(\lambda_1^t \beta\) y \(\lambda_2^t \beta\) dos funciones lineamlente estimables. Se tiene que
+
+\[
+    \cov{\lambda_1^t \tilde{\beta}}{\lambda_2^t \tilde{\beta}} = \sigma^2 \lambda_1^t \left(X^t X\right)^{-} \lambda_2
+\]
+
+*** Descomposición de la variabilidad
+Podemos descomponer la variabilidad de la siguiente forma:
+\[
+\underbrace{Y^t Y}_{SC_T}
+= \underbrace{\hat{Y}^t \hat{Y}}_{SC_{mod}}
++ \underbrace{\left(Y - \hat{Y} \right)^t \left(Y - \hat{Y} \right)}_{SC_{\varepsilon}}
+= Y^t P Y + Y^t \left(I - P \right)Y
+\]
+
+Llamamos
+- Suma de cuadrados total :: \(SC_T := Y^t Y\)
+- Suma de cuadrados debida al modelo :: \(SC_{mod} := \hat{Y}^t \hat{Y}\)
+- Suma de cuadrados debida al error :: \(SC_{\varepsilon} := \left(Y - \hat{Y} \right)^t \left(Y - \hat{Y} \right)\)
+
+Se tiene lo que se denomina *descomposición de la variabilidad total*:
+
+#+NAME: eq:var-total
+\begin{equation}
+\tag{SC}
+SC_{T} = SC_{mod} + SC_{\varepsilon}
+\end{equation}
+
+#+ATTR_LATEX :options [Esperanza de una forma cuadrática]
+#+ATTR_HTML: :btit (Esperanza de una forma cuadrática)
+#+NAME: lem:ev-sq
+#+BEGIN_lemma
+Sea \(X\) un vector aleatorio \(q\)-dimensional, con media \(\mu\) y matriz de varianzas y covarianzas \(\Sigma\), y sea \(A\) una matriz \(q \times q\). Se tiene que:
+\[
+    \ev{X^t A X} = \mu^t A \mu + \tr{(A\Sigma)}
+\]
+#+END_lemma
+
+#+ATTR_LATEX: :options [Esperanza de las sumas de los cuadrados]
+#+ATTR_HTML: :btit (Esperanza de las sumas de los cuadrados)
+#+NAME: thm:ev-sc
+#+BEGIN_theorem
+En el Modelo Lineal, si \(r = \rank{X}\), entonces
+\begin{align*}
+\ev{\frac{SC_{mod}}{r}} &= \frac{1}{r} \beta^t X^t X \beta + \sigma^2 \\
+\ev{\frac{SC_{\varepsilon}}{n-r}} &= \sigma^2
+\end{align*}
+#+END_theorem
+
+**** Cuadrados medios
+- cuadrado medio debido al modelo :: \(CM_{mod} = \frac{SC_{mod}}{r}\)
+- cuadrado medio debido al error :: \(CM_{\varepsilon} = \frac{SC_{\varepsilon}}{n-r}\)
+
 *** TODO Distribución e independencia de formas cuadráticas
+Las *formas cuadráticas* son variables aleatorias de la forma \(Y^t A Y\), donde \(A\) es una matriz \(n \times n\) simétrica y semidefinida positiva e \(Y\) es un vector aleatorio \(n\)-dimensional. En [[lem:ev-sq]] ya se vio que la expresión de la esperanza de una forma cuadrática es
+\[
+\ev{Y^t A Y} = \mu^t A \mu + \tr{(A \Sigma)}
+\]
+
+#+NAME: thm:sq-indep-producto
+#+BEGIN_theorem
+Si \(X \sim \Normal[n]{\mu}{I_{n}}\) y \(A\), \(B\) son matrices simétricas semidefinidas positivas, se tiene que \(X^t A X\) y \(X^t B X\) son independientes si y solo si \(AB = 0\).
+#+END_theorem
+
+#+NAME: col:sq-indep-producto-sigma
+#+BEGIN_corollary
+Si \(X \sim \Normal[n]{\mu}{\Sigma}\) y \(A\), \(B\) son matrices simétricas semidefinidas positivas, se tiene que \(X^t A X\) y \(X^t B X\) son independientes si y solo si \(A \Sigma B = 0\).
+#+END_corollary
+
+#+NAME: lem:sq-indep-multi
+#+BEGIN_lemma
+Si \(X \sim \Normal[n]{\mu}{I_{n}}\) y \(A_{1}, \dots, A_{k}\) son matrices simétricas semidefinidas positivas, se tiene que
+\(X^t A_{1} X, \dots, X^t A_{k} X\) son independientes 2 a 2 si y solo si son conjuntamente independientes.
+#+END_lemma
+
+#+NAME: col:sq-indep-multi-sigma
+#+BEGIN_corollary
+Si \(X \sim \Normal[n]{\mu}{\Sigma}\) y \(A_{1}, \dots, A_{k}\) son matrices simétricas semidefinidas positivas, se tiene que \(X^t A_{1} X, \dots, X^t A_{k} X\) son independientes si y solo si \(A_i \Sigma A_j = 0\ \forall i \neq j\).
+#+END_corollary
+
+#+NAME: def:chisq-noncentral
+#+BEGIN_definition
+Sea \(X \sim \Normal[n]{\mu}{\Sigma}\) y sea \(Y = X^t X\). Decimos que la variable aleatoria \(Y\) sigue una **distribución chi cuadrado no centrada** con \(n\) grados de libertad y parámetro de descentralización \(\lambda = \norm{\mu}^2 = \sum{\mu_i^2}\), y notamos \(Y \sim \chisqNC{n}{\lambda}\).
+#+END_definition
+
+#+BEGIN_theorem
+Si \(X \sim \Normal[n]{\mu}{I_n}\) y \(A\) es una matriz simétrica, entonces \(A\) es idempotente con rango \(\rank{A} = k\) si y solo si \(X^t A X \sim \chisqNC{k}{\lambda}\), donde \(\lambda = \mu^t A \mu\).
+#+END_theorem
+
+#+BEGIN_corollary
+Si \(X \sim \Normal[n]{\mu}{\Sigma}\) y \(A\) es una matriz simétrica, entonces \(X^t A X \sim \chisqNC{k}{\lambda}\) con \(\lambda = \mu^t A \mu\) si y solo si \(A \Sigma\) es idempotente con \(\rank{(A \Sigma)} = k\)
+#+END_corollary
+
+#+BEGIN_lemma
+Sean \(A_1, \dots, A_k\) matrices simétricas \(n \times n\) tales que \(I_n = \sum_{i=1}^{k} A_{i}\). Entonces son eqvuialentes:
+
+1. \(A_i\) es idempotente para todo \(i\).
+2. \(A_i A_j = 0\) para todo \(i \neq j\).
+3. \(\sum_{i=1}^{k} \rank{A_i} = n\).
+#+END_lemma
+
+Como consecuencia inmediata de los resultados sobre distribución e independencia de formas cuadráticas se tiene el siguiente teorema:
+
+#+NAME: thm:cochran
+#+ATTR_LATEX: :options [Cochran]
+#+ATTR_HTML: :btit (Cochran)
+#+BEGIN_theorem
+Sea \(X \sim \Normal[n]{\mu}{I_n}\) y supongamos que \(X^t X = X^t A_{1} X + \dots + X^t A_{k} X\), donde \(A_{1}, \dots, A_{k}\) son matrices simétricas semidefinidas positivas con \(\rank{A_i} = n_{i}\). Entonces se tiene que
+
+\[ \sum_{i=1}^{k} n_{i} = n
+\iff
+\begin{cases}
+X^t A_{i} X \sim \chisqNC{n_i}{\lambda_i},\quad \lambda_i = \mu^{t} A_{i} \mu,\ i = 1,\dots,k\\
+X^t A_{1} X, \dots, X^t A_{k} X \text{ independientes}
+\end{cases} \]
+#+END_theorem
+
 *** TODO Teoría normal en el Modelo Lineal
+En este apartado supondremos que el vector de errores sigue una distribución normal, \(\varepsilon \sim \Normal[n]{0}{\sigma^2 I_n}\) (y por tanto \(Y \sim \Normal[n]{X \beta}{\sigma^2 I_n}\)).
+
+**** Estimadores de máxima verosimilitud
+Bajo la hipótesis de normalidad, para el parámetro \(\theta = (\beta, \sigma^2)\), la función de verosimilitud viene dada por
+\[ L(\theta) = \left( \frac{1}{2 \pi \sigma^2} \right)^{n/2} \exp \left( -\frac{1}{2\sigma^2} \norm{y - \mu}^2 \right)\]
+\begin{align*}
+\log{L(\theta)}
+&= -\frac{n}{2} \log{(2 \pi \sigma^2)} - \frac{1}{2\sigma^2} \left(Y - X\beta\right)^t \left(Y - X\beta\right)\\
+&= -\frac{n}{2} \log{(2 \pi \sigma^2)} - \frac{1}{2\sigma^2} \left( Y^t Y + \beta^t X^t X \beta - 2 \beta^t X^t Y \right)
+\end{align*}
+
+Derivando la segunda expresión, obtenemos
+
+\begin{align*}
+\frac{\partial}{\partial \beta} \log{L(\theta)}
+&= 0 - \frac{1}{2\sigma^2}
+   \left( 0 + 2 X^t X\beta - 2 X^t Y \right)\\
+\frac{\partial}{\partial \sigma^2} \log{L(\theta)}
+&= \frac{2\pi}{2 \pi \sigma^2} + \frac{1}{\sigma^4} \left(Y - X\beta\right)^t \left(Y - X\beta\right)
+\end{align*}
+
+De aquí obtenemos que los EMV serán el resultado del siguiente sistema de ecuaciones:
+
+\begin{align*}
+X^t X \beta &= X^t Y\\
+n\sigma^2 &= \left(Y - X \beta\right)^t \left(Y - X \beta\right)
+\end{align*}
+
+Por tanto, los EMV son:
+
+\begin{align*}
+\hat{\beta}_{EMV} &= \left(X^t X\right)^{-} X^t Y = \tilde{\beta}\\
+\hat{\sigma}^2_{EMV} &= \frac{1}{n} \left(Y - X \tilde{\beta}\right)^t \left(Y - X \tilde{\beta}\right)\\
+&= \frac{SC_{\varepsilon}}{n}
+\end{align*}
+
+El EMV de \(\beta\) coincide con el de mínimos cuadrados, y el de \(\sigma^2\) también, salvo constante.
+
+**** Distribución
+
+Sean \(\lambda_1, \dots, \lambda_m \in \mathbb{R}^p\), de modo que \(\lambda_i^t \beta\) es linealmente estimable para todo \(1 \leq i \leq m\), con \(m \leq r\), y que la matriz
+
+\[
+\Lambda = \begin{pmatrix} \lambda_1^t \\ \vdots \\ \lambda_m^t \end{pmatrix}
+\]
+
+tiene rango \(m\). Entonces
+
+\[
+\Lambda \tilde{\beta} \sim \Normal[m]{\Lambda \beta}{\sigma^2 \Sigma_{\Lambda}}
+\]
+
+con \(\Sigma_{\Lambda} = \Lambda \left(X^t X\right)^{-} \Lambda^t\) y \(\rank{\Sigma_\Lambda} = m\).
+
+- \[ \frac{SC_{\varepsilon}}{\sigma^2} \sim \chisq{n-r} \]
+- \(\Lambda \tilde{\beta}\) y \(SC_{\varepsilon}\) son independientes
+
+Como consecuencia de las propiedades anteriores,
+
+\[
+F = \frac{1}{m} \frac{
+\left(\Lambda \tilde{\beta} - \Lambda \beta \right)^t
+\Sigma_\Lambda^{-1}
+\left(\Lambda \tilde{\beta} - \Lambda \beta \right)
+}{CM_{\varepsilon}} \sim \FSnedecor{m}{n-r}
+\]
+
+**** Contraste de hipótesis
+Consideremos el siguiente contraste:
+
+\[
+\begin{cases}
+H_{0} \colon& \Lambda \beta = d\\
+H_{1} \colon& \Lambda \beta \neq d
+\end{cases}
+\]
+
+donde \(\Lambda\) es una matriz \(m \times p\) como en el apartado anterior, i.e. con rango \(m\), de modo que \(\lambda_i^t \beta\) es linealmente estimable para \(1 \leq i \leq m\) y \(d \in \mathbb{R}^{m}\). Se dice entonces que \(H_{0}\) es una *hipótesis estimable*. El estadístico del test de razón de verosimilitud del contraste anterior viene dado por el del apartado anterior,
+
+\begin{align*}
+F &= \frac{1}{m} \frac{
+\left(\Lambda \tilde{\beta} - \Lambda \beta \right)^t
+\Sigma_\Lambda^{-1}
+\left(\Lambda \tilde{\beta} - \Lambda \beta \right)
+}{CM_{\varepsilon}}\\
+&= \frac{1}{m} \frac{SC_{\varepsilon_{0}} - SC_{\varepsilon}}{CM_{\varepsilon}}\\
+&\overset{H_0}{\sim} \FSnedecor{m}{n-r}
+\end{align*}
+
+La región crítica de este test rechaza \(H_0\) si \(F \geq \qF{m}{n-r}\).
+
+
+**** Potencia del test
+
+***** Ejemplo
+Supongamos que, basándonos en las obseraciones \(Y = ( Y_1, \dots, Y_n )\), deseamos contrastar las hipótesis
+
+\[\begin{cases}
+H_0 \colon& \theta \in \Theta_{0} \\
+H_1 \colon& \theta \in \Theta_{1} = \Theta \setminus \Theta_{0}
+\end{cases}\]
+
+Un *test* es una regla que especifica, para cada \(Y\), cuándo rechazar la hipótesis nula.
+Al conjunto de puntos del espacio muestral que nos llevan a rechazar la hipótesis nula se le llama *región crítica*.
+Al comparar la decisión tomada con el estado real podemos tenemos 4 posibilidades:
+
+| Acción              | \(\theta \in \Theta_o\) | \(\theta \in \Theta_1\) |
+|---------------------+-------------------------+-------------------------|
+| No rechazar \(H_0\) | correcto                | Error tipo II           |
+| Rechazar \(H_0\)    | Error tipo I            | correcto                |
+
+Estos errores se cuantifican mediante sus probabilidades. Llamamos [[https://es.wikipedia.org/wiki/Poder_estad%C3%ADstico][*función potencia*]] a
+\[
+\operatorname{pot}(\theta) = P_\theta(\text{rechazar }H_0)
+\].
+
+Normalmente se especifica una cuota superior \(\alpha\) para la probabilidad de error de tipo I:
+
+\[
+\operatorname{pot}(\theta) \leq \alpha \quad \forall \theta \in \Theta_0
+\]
+
+Llamamos *nivel de significación* a \(\alpha\).
+
+La probabilidad de error de tipo II depende del modelo y se puede acotar eligiendo el tamaño de muestra. Consideremos \(Y_{1}, \dots, Y_{n} \sim \Normal{\mu}{\sigma^2}\) una muestra aleatoria, con \(\sigma\) conocida, y supongamos que queremos contrastar la hipótesis \(H_0 \colon \mu = \mu_0\). Consideremos la regla que rechaza \(H_0\) si \(\abs{\overline{Y} - \mu_0} > d\).
+
+\[
+\alpha = P_{\mu_0} \left( \abs{\overline{Y} - \mu_0} > d\right)
+\iff
+1 - \alpha = P_{\mu_0} \left( \abs{\overline{Y} - \mu_0} \leq d \right)
+\]
+
+Por el teorema central del límite, tenemos que
+\[
+\sqrt{n} \left(\overline{Y} - \mu\right) \sim \Normal{0}{\sigma^2}
+\]
+
+Por tanto,
+
+\begin{align*}
+1 - \alpha
+&= P_{\mu_0} \left( \sqrt{n} \frac{\abs{\overline{Y}} - \mu_0}{\sigma} \leq \qnorm{1-\alpha/2} \right) \\
+&= P_{\mu_0} \left( \abs{\overline{Y} - \mu_0} \leq \frac{\sigma}{\sqrt{n}} \qnorm{1-\alpha/2} \right)
+\end{align*}
+
+Por tanto, la región crítica rechaza que rechaza \(H_0\) si
+\[
+\abs{\overline{Y} - \mu_0} > \frac{\sigma}{\sqrt{n}} \qnorm{1-\alpha/2}
+\]
+tiene un nivel de significación \(\alpha\) para cualquier tamaño de muestra \(n\).
+
+Para determinar \(n\), consideremos \(\mu \neq \mu_0\). Entonces
+
+\begin{align*}
+  \operatorname{pot}(\mu)
+  &= P_{\mu} \left( \abs{\overline{Y} - \mu_{0}} > \frac{\sigma}{\sqrt{n}} \qnorm{1-\alpha/2} \right)\\
+  &= 1 - P_{\mu} \left(-\qnorm{1-\alpha/2} + \sqrt{n}\frac{\mu_{0}-\mu}{\sigma}
+    \leq
+    \sqrt{n}\frac{\overline{Y} - \mu}{\sigma}
+    \leq
+    \sqrt{n}\frac{\mu_{0} - \mu}{\sigma} + \qnorm{1-\alpha/2} \right)\\
+  &= 1 - P \left(-\qnorm{1-\alpha/2} + \sqrt{n}\frac{\mu_{0}-\mu}{\sigma}
+    \leq
+    Z
+    \leq
+    \sqrt{n}\frac{\mu_{0} - \mu}{\sigma} + \qnorm{1-\alpha/2} \right)
+\end{align*}
+
+donde \(Z \sim \Normal{0}{1}\).
+
+Así, \(\operatorname{pot}(\mu) = \operatorname{pot}(\alpha, n, d)\) donde \(d = \mu_0 - \mu\), y verifica las siguientes propiedades:
+- \(\operatorname{pot}(\alpha, n, d) = \operatorname{pot}(\alpha, n, -d)\).
+- Fijados \(\alpha\) y \(n\), \(\operatorname{pot}(\alpha, n, d\) es creciente en \(d\).
+- Fijados \(\alpha\) y \(d\), \(\operatorname{pot}(\alpha, n, d\) es creciente en \(n\).
+- \(\operatorname{pot}(\alpha, n, d) \geq \alpha \ \forall n \ \forall d \geq 0\).
+
+Fijados \(\alpha\), una diferencia mínima \(\delta_0 > 0\) y una potencia mínima \(\operatorname{pot}_0 > \alpha\), es posible determinar un tamaño de muestra mínimo \(n_0\) tal que
+\[ \operatorname{pot}(\alpha, n, d) \geq \operatorname{pot}_{0} \quad \forall n \geq n_{0} \quad \forall d \geq d_{0} \]
+
+Equivalentemente, si \(n \geq n_0\), entonces
+\[P_{\mu}\left(\text{error tipo II}\right) \leq 1 - \operatorname{pot}_{0} \quad \forall \mu : \abs{\mu - \mu_{0}} \geq d_{0}\]
+
+#+BEGIN_note
+Como \(\lim_{d \to 0} \operatorname{pot}(\alpha, n, d) = \alpha \ \forall n\), no existe un tamaño de muestra que permita acotar la probabilidad de error de tipo \(II\) para cualquier diferencia de medias.
+#+END_note
+
+***** Modelo Lineal General
+Consideremos el Modelo Lineal General \(Y = X \beta + \varepsilon\) y el contraste \(H_0 : \Lambda \beta = d\), donde \(\rank{X} = r \leq p\) y \(\Lambda\) es una matriz \(m \times p\) con rango \(m\).
+Para este contraste la región crítica del test de razón de verosimilitudes viene dada por
+\begin{align*}
+F = \frac{1}{m} \frac{
+\left(\Lambda \tilde{\beta} - d \right)^t
+\Sigma_\Lambda^{-1}
+\left(\Lambda \tilde{\beta} - d \right)
+}{CM_{\varepsilon}} \geq \qF{m}{n-r}
+\end{align*}
+
+donde \(\Sigma_\Lambda = \Lambda \left( X^t X \right)^{-} \Lambda^t\), pues \(F \overset{H_0}{\sim} \FSnedecor{m}{n-r}\).
+
+Si \(H_0\) no fuera cierta, entonces \(F\) seguiría una distribución F de Snedecor no centrada.
+
+#+BEGIN_definition
+Sean \(U, V\) variables aleatorias independientes tales que \(U \sim \chisqNC{p}{\lambda}\) y \(V \sim \chisq{p}\).
+A la distribución de \(F = \frac{U/p}{V/q}\) le llamamos *distribución F de Snedecor no centrada*
+con \(p\) y \(q\) grados de libertad y parámetro de descentralización \(\lambda\), y notamos \(F \sim \FSnedecorNC{p}{q}{\lambda}\).
+#+END_definition
+
+Si \(H_0\) no ess cierta, \(F \sim \FSnedecorNC{m}{n-r}{\lambda}\) con
+
+\[
+  \lambda = \frac{1}{\sigma^{2}}
+  \left(\Lambda\beta - d\right)^{t}
+  \Sigma_{\Lambda}^{-1}
+  \left(\Lambda\beta - d\right)
+\]
+
+En este caso general, se tienen propiedades similares a las del apartado anterior:
+- La potencia crece con el tamaño muestral.
+- La potencia crece con \(\lambda\).
+- \(\lim_{\lambda \to 0} \operatorname{pot} = \alpha\)
+
+Así, no existe un \(n_{0}\) que garantice una potencia mínima \(\operatorname{pot}_0\)
+\[
+\operatorname{pot} \geq \operatorname{pot}_0 > \alpha \quad \forall n \geq n_0 \quad \forall \lambda > 0
+\]
+
+Para determinar el tamaño de la muestra se fijan \(\alpha\), \(\operatorname{pot}_0 \geq \alpha\) y \(\lambda_0 > 0\) y se busca \(n_0\) tal que \(\operatorname{pot} \geq \operatorname{pot}_0 > \alpha\) para todo \(n \geq n_0\) y para todo \(\lambda \geq \lambda_0\), quedando sin controlar la potencia en \(\lambda \in (0, \lambda_0)\).
+
 
 * TODO Experimentos con un factor
 
@@ -298,5 +645,5 @@ bibliographystyle:plain
 bibliography:dex.bib
 
 # Local Variables:
-# eval: (latex-math-mode 1)
+# eval: (progn (require 'latex) (latex-math-mode 1))
 # End:

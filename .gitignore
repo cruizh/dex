@@ -306,3 +306,10 @@ TSWLatexianTemp*
 *.glstex
 
 # End of https://www.toptal.com/developers/gitignore/api/elisp,latex
+
+# Built file
+DEx.html
+DEx.pdf
+
+# Intermediate file for org-mode
+DEx.tex
