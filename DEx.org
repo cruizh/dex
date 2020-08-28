@@ -629,6 +629,169 @@ Para determinar el tamaño de la muestra se fijan \(\alpha\), \(\operatorname{po
 
 * TODO Experimentos con un factor
 
+** Introducción
+
+Distinguiremos dos casos:
+- Efectos fijos :: se desea contrastar la igualdad de efectos de tratamientos fijos, e.g. 5 temperaturas fijadas de antemano.
+- Efectos aleatorios :: se desea contrastar la igualdad de efectos de una población infinita de tratamientos. Para ello, se toma una muestra aleatoria, e.g. 5 temperaturas seleccionadas aleatoriamente en un intervalo.
+
+** Modelo de efectos fijos
+
+*** Modelo
+Supongamos que se dispone de \(k\) muestras independientes procedentes de sendas poblaciones, determinadas por los niveles de un factor. Supongamos que cada población se distribuye siguiendo una \(\Normal{\mu_i}{\sigma^2}\), i.e. que la varianza es la misma y difieren (o no) en la media. Las observaciones pueden expresarse como
+
+\[ y_{ij} = \mu_{i} + \varepsilon_{ij}\]
+
+donde
+- \(i = 1, \dots, k\).
+- \(j = 1, \dots, n_{i}\).
+- \(n_{i}\) :: tamaño de la muestra en la \(i\)-ésima población.
+- \(y_{ij}\) :: \(j\)-ésima observación en la \(i\)-ésima población (o nivel del factor)
+- \(\mu_{i}\) :: respuesta media en la \(i\)-ésima población (\(\ev{y_{ij}} = \mu_{i}\)).
+- \(\varepsilon_{ij}\) :: error aleatorio, \(\varepsilon_{ij} \sim \Normal{0}{\sigma^2}\) independientes e idénticamente distribuidos.
+
+#+NAME: def:balanceado
+#+BEGIN_definition
+Si \(n_{1} = \dots = n_{k}\), se dice que el diseño es *balanceado*.
+#+END_definition
+
+Se puede extraer la media global en el modelo, obteniendo la siguiente representación:
+
+\[y_{ij} = \mu + \alpha_{i} + \varepsilon_{ij}\]
+
+en las mismas condiciones, donde
+
+- \(\mu\) :: media global.
+- \(\alpha_{i}\) :: efecto del \(i\)-ésimo tratamiento.
+
+**** Expresión matricial
+
+Podemos expresar el modelo matricialmente como \(Y = X \beta + \varepsilon\), donde
+
+\begin{align*}
+  Y &= \begin{pmatrix} y_{11} & \dots & y_{1n_{1}} & y_{21} & \dots & y_{kn_{k}} \end{pmatrix}^{t}\\
+  \varepsilon &= \begin{pmatrix} \varepsilon_{11} & \dots & \varepsilon_{1n_{1}} & \varepsilon_{21} & \dots & \varepsilon_{kn_{k}} \end{pmatrix}^{t}\\
+  \beta &= \begin{pmatrix} \mu & \alpha_{1} & \dots & \alpha_{k} \end{pmatrix}^{t}\\
+  X &= \begin{pmatrix}
+    1_{n_{1}} & 1_{n_{1}} & 0         & \dots  & 0\\
+    1_{n_{2}} & 0         & 1_{n_{2}} & \dots  & 0\\
+    \vdots    & \vdots    & \vdots    & \ddots & \vdots\\
+    1_{n_{k}} & 0         & 0         & \dots  & 1_{n_{k}}
+    \end{pmatrix}
+\end{align*}
+
+#+NAME: def:matriz-diseño
+#+BEGIN_definition
+Llamamos *matriz de diseño* a la matriz \(X\) anterior, con dimensión \(N \times (k+1)\), con \(N = \sum_{i=1}^{k} n_{i}\), con rango \(k\).
+#+END_definition
+
+*** Estimación de los parámetros
+Podemos imponer \(\sum_{i=1}^{k} n_{i} \alpha_{i} = 0\), de donde obtenemos la solución del [[eq:lm-sen]]:
+\begin{align*}
+  \hat{\mu} &= \overline{y}_{\cdot \cdot}\\
+  \hat{\alpha}_{i} &= \overline{y}_{i \cdot} - \overline{y}_{\cdot \cdot}
+\end{align*}
+
+donde
+
+\begin{align*}
+  \overline{y}_{\cdot \cdot} &= \frac{1}{N} \sum_{i=1}^{k} \sum_{j=1}^{n_{i}} y_{ij}\\
+  \overline{y}_{i \cdot} &= \frac{1}{n_{i}} \sum_{j=1}^{n_{i}} y_{ij}
+\end{align*}
+
+En general llamaremos e.g. \(\overline{y}_{ij\cdot k \cdot}\) a la media aritmética de las observaciones con los subíndices explícitos fijos (variando los subíndices con \(\cdot\)).
+
+\(\lambda_{0} \mu + \sum_{i=1}^{k} \lambda_{i} \alpha_{i}\) es estimable si y solo si \(\lambda_{0} = \sum_{i=1}^{k} \lambda_{i}\).
+
+En ese caso, un estimador insesgado es \(\sum_{i=1}^{k} \lambda_{i} \overline{y}_{i \cdot}\).
+
+Como la [[def:matriz-diseño][matriz de diseño]] tiene rango \(k\), un estimador insesgado de la varianza viene dado por
+
+\[\hat{\sigma}^{2} = \frac{SC_{\varepsilon}}{N - k}\]
+
+donde \(SC_{\varepsilon}\) es la suma de los cuadrados debida al error, o
+
+\[SC_{\varepsilon}
+  = \sum_{i=1}^{k} \sum_{j=1}^{n_{i}} \left(y_{ij} - \hat{y}_{ij}\right)^{2}
+  = \sum_{i=1}^{k} \sum_{j=1}^{n_{i}} \left(y_{ij} - \overline{y}_{i\cdot}\right)^{2} \]
+
+
+*** Contraste fundamental
+
+El contraste fundamental de un modelo es el que tiene como hipótesis nula que los parámetros son nulos (o unitarios en un modelo multiplicativo), i.e. que los factores y/o las variables explicativas no afectan a las observaciones de la respuesta. En este caso, el contraste es
+
+\[ \begin{cases}
+    H_{0} \colon& \alpha_{1} = \dots = \alpha_{k}\\
+    H_{1} \colon& \exists i,j : \alpha_{i} \neq \alpha_{j}
+  \end{cases} \]
+
+El estadístico del test de razón de verosimilitudes para este contraste es
+
+\[F = \frac{SC_{\varepsilon_{0}} - SC_{\varepsilon}}{SC_{\varepsilon}} \frac{N-k}{k-1} \overset{H_{0}}{\sim} \FSnedecor{k-1}{N-k}\]
+
+Se tiene que
+
+\[ \begin{aligned}
+    SC_{\varepsilon_{0}}
+    &= SC_{tot}
+    = \sum_{i=1}^{k} \sum_{j=1}^{n_{i}} \left(y_{ij} - \overline{y}_{\cdot \cdot}\right)^{2}\\
+    SC_{tot}
+    &= SC_{\alpha} + SC_{\varepsilon}\\
+    SC_{\alpha}
+    &= \sum_{i=1}^{k} n_{i} \hat{\alpha}_{i}^{2}
+    = \sum_{i=1}^{k} n_{i} \left(\overline{y}_{i \cdot} - \overline{y}_{\cdot \cdot}\right)^{2}
+\end{aligned} \]
+
+
+De aquí se obtiene que
+\[F = \frac{CM_{\alpha}}{CM_{\varepsilon}} \overset{H_{0}}{\sim} \FSnedecor{k-1}{N-k}\]
+
+donde \[CM_{\alpha} = \frac{SC_{\alpha}}{k-1}\].
+
+Llamamos *suma de cuadrados debida al factor* a \(SC_{\alpha}\) y *cuadrado medio debido al factor* a \(CM_{\alpha}\).
+
+Los resultados obtenidos se disponen en una tabla llamada *tabla ANOVA*:
+
+| Fuente de variación | Suma de cuadrados    | Grados de libertad | Cuadrados medios     | F-estadístico                          |
+|---------------------+----------------------+--------------------+----------------------+----------------------------------------|
+| Factor              | \(SC_{\alpha}\)      | \(k-1\)            | \(CM_{\alpha}\)      | \(F = CM_{\alpha} / CM_{\varepsilon}\) |
+| Error               | \(SC_{\varepsilon}\) | \(N-k\)            | \(CM_{\varepsilon}\) |                                        |
+| Total               | \(SC_{tot}\)         | \(N-1\)            |                      |                                        |
+
+#+BEGIN_note
+Cada suma de cuadradso es una forma cuadrática, i.e. un estadístico de la forma
+\[SC_{*} = Y^{t} A_{*} Y\]
+
+donde \(A_{ * }\) es simétrica semidefinida positiva. Los grados de libertad son el rango de \(A_{ * }\).
+#+END_note
+
+Otra forma de obtener el test anterior es mediante la siguiente tabla:
+
+| Fuente de variación | Suma de cuadrados                                                                  | Grados de libertad | \(\ev{CM_{ * }}\)                                            |
+|---------------------+------------------------------------------------------------------------------------+--------------------+--------------------------------------------------------------|
+| Factor              | \(SC_{\alpha} = \sum_{i} n_{i} \hat{\alpha}_{i}^{2}\)                              | \(k-1\)            | \(\sigma^{2} + \frac{1}{k-1} \sum_{i} n_{i} \alpha_{i}^{2}\) |
+| Error               | \(SC_{\varepsilon} = \sum_{ij} \left( y_{ij} - \overline{y}_{i \cdot}\right)^{2}\) | \(N-k\)            |                                                              |
+| Total               | \(SC_{tot} = \sum_{ij} \left( y_{ij} - \overline{y}_{\cdot \cdot} \right)^{2}\)    | \(N-1\)            |                                                              |
+
+Nótese que \(\ev{CM_{\alpha}} \geq \ev{CM_{\varepsilon}}\), con la igualdad se da si y solo si \(H_{0}\) es cierta.
+Por tanto, un valor grande de \(F = CM_{\alpha}/CM_{\varepsilon}\) indicaría que \(H_{0}\) no es cierta.
+Se puede obtener la distribución de \(F\) mediante el [[thm:cochran][Teorema de Cochran]]:
+
+\[ \underbrace{SC_{T}}_{N} = \underbrace{N \overline{y}_{\cdot \cdot}^{2}}_{1} + \underbrace{SC_{\alpha}}_{k-1} + \underbrace{SC_{\varepsilon}}_{N-k} \]
+
+Entonces \(SC_{\alpha}\) y \(SC_{\varepsilon}\) son independientes, \(SC_{\alpha} / \sigma^{2} \sim \chisqNC{k-1}{\lambda_{\alpha}}\) y \(SC_{\varepsilon} / \sigma^{2} \sim \chisq{N-k}\).
+
+
+*** Comparaciones múltiples
+
+*** Diagnosis
+
+** Modelo de efectos aleatorios
+
+** Determinación del tamaño muestral
+
+** Programación
+
 * TODO Experimentos con 2 factores
 
 * TODO Experimentos multifactoriales
