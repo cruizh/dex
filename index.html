@@ -1,0 +1,2393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-09-02 Wed 17:43 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Diseño de Experimentos</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Carlos José Ruiz-Henestrosa Ruiz" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://cruizh.github.io/org-html-themes/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://cruizh.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cruizh.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://cruizh.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
+<script src="mathjax_config.js"></script>
+<link rel="stylesheet" type="text/css" href="theorems_es.css">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Diseño de Experimentos</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org87c55fb">Prólogo</a></li>
+<li><a href="#org712c8a8">1. Introducción</a>
+<ul>
+<li><a href="#org2dc965f">1.1. Introducción al diseño experimental</a></li>
+<li><a href="#org5f730fd">1.2. Diseño estadístico de experimentos</a></li>
+<li><a href="#org95f8449">1.3. Clasificación de los diseños</a></li>
+<li><a href="#orge29588c">1.4. Inferencia en Modelos Lineales</a>
+<ul>
+<li><a href="#orgfdcfe8c">1.4.1. Hipótesis del modelo</a></li>
+<li><a href="#orgbc04d26">1.4.2. Propiedades de los vectores aleatorios</a></li>
+<li><a href="#org57df537">1.4.3. Método de mínimos cuadrados</a></li>
+<li><a href="#org795f8d8">1.4.4. Funciones linealmente estimables</a></li>
+<li><a href="#org8d7b9d0">1.4.5. Descomposición de la variabilidad</a></li>
+<li><a href="#orgfb41171">1.4.6. <span class="todo TODO">TODO</span> Distribución e independencia de formas cuadráticas</a></li>
+<li><a href="#org8f1c321">1.4.7. <span class="todo TODO">TODO</span> Teoría normal en el Modelo Lineal</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org804f1ab">2. <span class="todo TODO">TODO</span> Experimentos con un factor</a>
+<ul>
+<li><a href="#orgd402444">2.1. Introducción</a></li>
+<li><a href="#org09a354e">2.2. Modelo de efectos fijos</a>
+<ul>
+<li><a href="#orgf039e90">2.2.1. Modelo</a></li>
+<li><a href="#org65b5e67">2.2.2. Estimación de los parámetros</a></li>
+<li><a href="#org48723ec">2.2.3. Contraste fundamental</a></li>
+<li><a href="#orgda2ecf6">2.2.4. Comparaciones múltiples</a></li>
+<li><a href="#org6b92253">2.2.5. Diagnosis</a></li>
+</ul>
+</li>
+<li><a href="#org7a7d27a">2.3. Modelo de efectos aleatorios</a></li>
+<li><a href="#org4ca1b78">2.4. Determinación del tamaño muestral</a></li>
+<li><a href="#orge6ff60a">2.5. Programación</a></li>
+</ul>
+</li>
+<li><a href="#orge56a6f9">3. <span class="todo TODO">TODO</span> Experimentos con 2 factores</a></li>
+<li><a href="#orgb7e6ac0">4. <span class="todo TODO">TODO</span> Experimentos multifactoriales</a>
+<ul>
+<li><a href="#org523ffb0">4.1. Experimento con 3 factores completo</a></li>
+<li><a href="#orga9fe75c">4.2. Tests F aproximados: método de Satterthwaite</a></li>
+<li><a href="#org0481212">4.3. Experimentos con factores cruzados y anidados</a></li>
+<li><a href="#org69ed812">4.4. Sumas de cuadrados y valores esperados de los cuadrados medios</a></li>
+</ul>
+</li>
+<li><a href="#org0d9cc86">5. <span class="todo TODO">TODO</span> Diseños en bloques</a>
+<ul>
+<li><a href="#org5720364">5.1. Diseño en bloques completos</a></li>
+<li><a href="#orgbd8553d">5.2. Diseño en cuadrado latino</a>
+<ul>
+<li><a href="#orge1abaa1">5.2.1. Diseño en cuadrado grecolatino</a></li>
+</ul>
+</li>
+<li><a href="#orgc08a715">5.3. <span class="todo TODO">TODO</span> Diseño por bloques incompletos balanceado</a></li>
+<li><a href="#org2d65342">5.4. <span class="todo TODO">TODO</span> Diseño en cuadrado de Youden</a></li>
+</ul>
+</li>
+<li><a href="#org84dcf00">6. <span class="todo TODO">TODO</span> Análisis de la covarianza</a>
+<ul>
+<li><a href="#orge2e1026">6.1. Estimación</a></li>
+<li><a href="#org1bc308c">6.2. Método de mínimos cuadrados en dos pasos</a></li>
+<li><a href="#org850e8ed">6.3. Contrastes de hipótesis</a>
+<ul>
+<li><a href="#org697f329">6.3.1. Igualdad de efectos de los tratamientos</a></li>
+<li><a href="#org9550682">6.3.2. Nulidad de los coeficientes de regresión</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgf9a6ac2">7. Bibliografía</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org87c55fb" class="outline-2">
+<h2 id="org87c55fb">Prólogo</h2>
+<div class="outline-text-2" id="text-org87c55fb">
+<p>
+Estos apuntes se basan principalmente en los apuntes de la profesora de la asignatura <a class='org-ref-reference' href="#DEx">DEx</a>, así como en los libros <a class='org-ref-reference' href="#Montgomery2017">Montgomery2017</a> y <a class='org-ref-reference' href="#Toutenburg2009">Toutenburg2009</a>.
+</p>
+
+<p>
+Para la versión HTML, se utiliza <a href="https://github.com/fniessen/org-html-themes#readtheorg">ReadTheOrg</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org712c8a8" class="outline-2">
+<h2 id="org712c8a8"><span class="section-number-2">1</span> Introducción</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org2dc965f" class="outline-3">
+<h3 id="org2dc965f"><span class="section-number-3">1.1</span> Introducción al diseño experimental</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Comenzamos con varias definiciones:
+</p>
+
+<dl class="org-dl">
+<dt>Experimento</dt><dd>prueba o ensayo.</dd>
+<dt>Experimento diseñado</dt><dd>prueba o serie de pruebas en las que se introducen cambios deliberados en las variables de entrada de un proceso o sistema, de manera que sea posible observar o identificar las causas de los cambios en la respuesta de salida.</dd>
+<dt>Diseño estadístico de experimentos</dt><dd></dd>
+</dl>
+
+<p>
+Como notación, llamaremos \(X_{i}\) a las variables controlables del proceso, y \(Z_{i}\) a las variables incontrolables en el contexto del experimento.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5f730fd" class="outline-3">
+<h3 id="org5f730fd"><span class="section-number-3">1.2</span> Diseño estadístico de experimentos</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+El <b>diseño estadístico de experimentos</b> es el proceso de planificación de un experimento para obtener datos que puedan ser analizados mediante métodos estadísticos.
+</p>
+
+<p>
+Algunos conceptos básicos son los siguientes:
+</p>
+
+<dl class="org-dl">
+<dt>Factor</dt><dd>variable cuyo efecto experimental debe ser medido. Generalmente suele ser de tipo "factor", i.e. toma valores en un conjunto finito.</dd>
+<dt>Nivel o tratamiento</dt><dd>Estados o modalidades del factor.</dd>
+<dt>Unidad experimental</dt><dd>elemento del experimento sobre el que se aplica un tratamiento.</dd>
+<dt>Bloque</dt><dd>grupo de unidades experimentales homogéneas respecto de un determinado factor.</dd>
+<dt>Replicación</dt><dd>repetición del experimento bajo las mismas condiciones de las fuentes de variación controladas. Permite estimar la variabilidad muestral.</dd>
+<dt>Aleatorización</dt><dd>asignación aleatoria de material experimental o del orden en que se realizan las pruebas.</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-org95f8449" class="outline-3">
+<h3 id="org95f8449"><span class="section-number-3">1.3</span> Clasificación de los diseños</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+Los diseños de varios factores se clasifican en diseños de clasificación cruzada y diseños anidados:
+</p>
+
+<dl class="org-dl">
+<dt>Diseños cruzados</dt><dd>diseños en los que los niveles de los factores son combinados o cruzados, y pueden ser aplicados simultáneamente. Los hay <i>completos</i>, en los que hay al menos una observación de cada combinación de niveles de todos los factores, e <i>incompletos</i>, en los que faltan observaciones.</dd>
+<dt>Diseños anidados</dt><dd>diseños en los que carece de sentido cruzar los factores, ya que los niveles de un factor pueden variar dentro de los niveles del otro.</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-orge29588c" class="outline-3">
+<h3 id="orge29588c"><span class="section-number-3">1.4</span> Inferencia en Modelos Lineales</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+Nos centraremos en el estudio de modelos lineales, que son aquellos en los que una observación \(y\) puede ser representada mediante
+</p>
+
+\begin{equation}
+\label{org6adbb8f}
+y = \sum_{i=1}^{p} x_{i} \beta_{i} + \varepsilon
+\end{equation}
+
+<p>
+donde
+</p>
+<ul class="org-ul">
+<li>\(x_{i}\) representan los valores conocidos</li>
+<li>\(\beta_{i}\) representan coeficientes desconocidos</li>
+<li>\(\varepsilon\) es el error aleatorio</li>
+</ul>
+
+<p>
+Si tenemos más de una observación, \(y_{1}, \dots, y_{n}\), tendremos \(x_{i1},\dots,x_{ip}\) para cada observación, y podemos expresar la ecuación matricialmente:
+</p>
+
+\begin{equation}
+\label{org3060338}
+Y = X \beta + \varepsilon
+\end{equation}
+
+<p>
+donde
+</p>
+<ul class="org-ul">
+<li>\(Y = \begin{pmatrix} y_{1} & \dots & y_{n} \end{pmatrix}^t\) es el vector compuesto por las observaciones.</li>
+<li>\(X\) es una matriz \(n \times p\) de constantes conocidas.</li>
+<li>\(\beta\) es un vector de parámetros de dimensión \(p\).</li>
+<li>\(\varepsilon\) es un vector de errores aleatorios de dimensión \(n\).</li>
+</ul>
+
+<p>
+Llamamos <b>matriz del diseño</b> a \(X \in \mathcal{M}_{n \times p}(\mathbb{R})\). En los modelos asociados al diseño de experimentos, se tendrá \(x_{ij} \in \{0,1\}\) (porque codificaremos los factores utilizando <a href="https://en.wikipedia.org/wiki/Dummy_variable_(statistics)">variables <i>dummy</i></a>).
+</p>
+
+<p>
+En el modelo, \(\beta \in \mathbb{R}^{p}\). El objetivo se centrará en estimar sus componentes (o funciones de las mismas) y realizar contrastes sobre ellas.
+</p>
+
+<p>
+El modelo es <i>lineal</i> porque cada observación es expresada como combinación lineal de los parámetros \(\beta_{j}\). No importa que sea o no combinación lineal de las \(x_{i}\).
+</p>
+</div>
+
+<div id="outline-container-orgfdcfe8c" class="outline-4">
+<h4 id="orgfdcfe8c"><span class="section-number-4">1.4.1</span> Hipótesis del modelo</h4>
+<div class="outline-text-4" id="text-1-4-1">
+<p>
+En el modelo lineal la observación \(i\)-ésima consta de dos componentes:
+</p>
+<ul class="org-ul">
+<li>\(\hat{y}_{i} = \sum_{j=1}^{p} x_{ij} \beta{j}\)</li>
+<li>\(\varepsilon_{i}\), el error en la \(i\)-ésima observación</li>
+</ul>
+
+<p>
+Supondremos que los errores \(\varepsilon_{i}\) son variables aleatorias que satisfacen las siguientes hipótesis:
+</p>
+<ol class="org-ol">
+<li><a id="org532d178"></a>Tienen media 0, \(\ev{\varepsilon_{i}} = 0 \ \forall i\), y por tanto \(\ev{Y} = X \beta\), i.e. la estimación es insesgada.</li>
+<li><a id="orgfdcdbcb"></a>Están incorrelados, i.e. \(\ev{\varepsilon_{i} \varepsilon_{j}} = 0 \ \forall i \neq j\). Equivalentemente, la covarianza entre dos errores distintos es nula.</li>
+<li><a id="org0ff33b7"></a> <i>Hipótesis de homocedasticidad</i>: todos tienen la misma varianza \(\var{\varepsilon_{i}} = \sigma^2 \in \mathbb{R}^{+} \ \forall i\).</li>
+</ol>
+
+<p>
+De <a href="#orgfdcdbcb">2</a> y <a href="#org0ff33b7">3</a> se obtiene que \(\var{Y} = \var{\varepsilon} = \sigma^{2} I_{n}\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbc04d26" class="outline-4">
+<h4 id="orgbc04d26"><span class="section-number-4">1.4.2</span> Propiedades de los vectores aleatorios</h4>
+<div class="outline-text-4" id="text-1-4-2">
+<p>
+Si \(Y\) es un vector aleatorio, se cumplen las siguientes propiedades:
+</p>
+<ul class="org-ul">
+<li>\(\ev{Y}\) es un vector cuya \(i\)-ésima componente es \(\ev{y_{i}}\).</li>
+<li>La esperanza es un operador lineal, i.e. \(\ev{AY + b} = A \ev{Y} + b\) para toda matriz \(A\) y vector \(b\) compatibles.</li>
+<li>\(\var{Y}\) es una matriz simétrica semidefinida positiva, con \(v_{ij} = \cov{y_{i}}{y_{j}}\).</li>
+<li>\(\var{AY} = A \var{Y} A^t\)</li>
+<li>\(\cov{AY}{BZ} = A \cov{Y}{Z} B^t\)</li>
+<li>\(\cov{Y}{Z} = \ev{YZ^t} - \ev{Y} \ev{Z}^t\)</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org57df537" class="outline-4">
+<h4 id="org57df537"><span class="section-number-4">1.4.3</span> Método de mínimos cuadrados</h4>
+<div class="outline-text-4" id="text-1-4-3">
+<p>
+Para estimar \(\beta\) utilizaremos el método de mínimos cuadrados, que consiste en tomar \(\hat{\beta}\) de modo que se minimice la suma de cuadrados de los residuos, definidos como sigue: dado un vector de estimadores \(\hat{\beta}\), llamamos \(\hat{y}_i\) al estimador de \(\ev{y_i}\): \(\hat{y}_i = \sum_{j=1}^{p} x_{ij} \hat{\beta}_{j}\), y definimos el residuo como \(e_i = y_i - \hat{y}_i\).
+</p>
+
+<p>
+Este método minimiza \(\sum_{i=1}^{n} e_{i}^{2}\), cuya solución constituye lo que se denomina el <b>Sistema de Ecuaciones Normales</b>:
+</p>
+
+\begin{equation}
+\label{org661305d}
+\tag{SEN}
+X^t Y = X^t X \hat{\beta}
+\end{equation}
+
+<p>
+Veamos cómo se obtiene:
+</p>
+<div class="proof">
+<p>
+En primer lugar, observamos que podemos reescribir la función objetivo.
+</p>
+
+<p>
+\[S(\beta) := \sum_{i=1}^{n} e_{i}^{2} = e^t e = \left(Y - X \beta \right)^t \left(Y - X \beta \right)\]
+</p>
+
+<p>
+El mínimo existe porque  \(S(\beta)\) es una función diferenciable convexa (una <a href="https://en.wikipedia.org/wiki/Quadratic_form_(statistics)">forma cuadrática</a>). Podemos reescribir
+</p>
+
+\begin{align*}
+S(\beta)
+&= Y^t Y + \beta^t X^t X \beta - Y^t X \beta \phantom{\big(\big)^t}-\beta^t X^t Y \\
+&= Y^t Y + \beta^t X^t X \beta - \left(Y^t X \beta\right)^t - \beta^t X^t Y \\
+&= Y^t Y + \beta^t X^t X \beta - 2 \beta^t X^t Y
+\end{align*}
+
+<p>
+donde hemos podido trasponer porque todas las "matrices" son en realidad escalares (y por tanto son matrices simétricas).
+</p>
+
+<p>
+El mínimo se encontrará en el punto que anule el gradiente, por lo que derivamos respecto de \(\beta\):
+</p>
+
+<p>
+\[
+\frac{\partial S(\beta)}{\partial \beta} = 0 + 2 X^t X \beta - 2 X^t Y
+\]
+</p>
+
+<p>
+Eseto se obtiene de que \(\frac{\partial}{\partial X} X^t A X = 2 A X\) y \(\frac{\partial}{\partial X} a^t X = a\).
+</p>
+
+<p>
+Por tanto el mínimo se alcanza en la solución de la ecuación
+</p>
+
+<p>
+\[
+\frac{\partial S(\beta)}{\partial \beta} = 0
+\]
+</p>
+
+<p>
+que es equivalente a \eqref{org661305d}.
+</p>
+
+</div>
+
+<p>
+La matriz \(X^t X\) es una matriz \(p \times p\) simétrica semidefinida positiva con el mismo rango que \(X\). Supondremos que \(n \geq p\), y por tanto el rango de \(X\) es el número de columnas de \(X\) que son linealmente independientes, i.e. el número de variables explicativas independientes.
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="org27fc5a9"></a>Caso de rango total<br />
+<div class="outline-text-5" id="text-1-4-3-1">
+<p>
+Este es el caso usual en los modelos de regresión múltiple, pero apenas se da en los modelos de diseño de experimentos. Se da como introducción, pues su solución ayuda a calcular la del otro caso. Si las \(p\) columnas de \(X\) son independientes, entonces \(\rank(X) = \rank(X^t X) = p\), luego \(X^t X\) es invertible y \eqref{org661305d} tiene solución única, dada por
+</p>
+
+<p>
+\[ \hat{\beta} = \left(X^t X \right)^{-1} X^t Y \]
+</p>
+
+<p>
+El estimador obtenido es insesgado, y su varianza es \(\var{\hat{\beta}} = \sigma^2 \left(X^t X \right)^{-1}\).
+</p>
+
+<div class="proof">
+\begin{align*}
+\var{\hat{\beta}}
+&= V \left( \left( X^t X\right)^{-1} X^t Y \right) \\
+&= \left( X^t X\right)^{-1} X^t\ \var{Y}\ X \left( \left(X^t X \right)^{-1} \right)^{t}\\
+&= \left( X^t X\right)^{-1} X^t\ \var{X\beta + \varepsilon}\ X \left(X^t X \right)^{-1}\\
+&= \left( X^t X\right)^{-1} X^t\ \var{\varepsilon}\ X \left(X^t X \right)^{-1}\\
+&= \left( X^t X\right)^{-1} X^t\ \sigma^2 I_{n}\ X \left(X^t X \right)^{-1}\\
+&= \sigma^2 \left( X^t X\right)^{-1} X^t X \left(X^t X \right)^{-1}\\
+&= \sigma^2 \left( X^t X\right)^{-1}
+\end{align*}
+
+</div>
+</div>
+</li>
+
+<li><a id="orgf7222bd"></a>Caso singular<br />
+<div class="outline-text-5" id="text-1-4-3-2">
+<p>
+Este es el caso que se dará más en diseño de experimentos. Sea \(r < p\) el rango de \(X\). Entonces \(X^t X\) es singular y no existe su inversa. Para determinar las posibles soluciones utilizaremos el concepto de inversa generalizada de una matriz.
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="org88651ef"></a>Inversa generalizada<br />
+<div class="outline-text-6" id="text-1-4-3-2-1">
+<p>
+Sea \(A\) una matriz \(n \times m\). Diremos que \(A^{-}\) es una inversa generalizada de \(A\) si
+\[A A^{-} A = A\]
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="orgc8a138b"></a>Propiedades<br />
+<div class="outline-text-7" id="text-1-4-3-2-1-1">
+<ul class="org-ul">
+<li>\(\rank(A^{-}) \geq \rank(A)\).</li>
+<li>\(A A^{-}\) es una matriz idempotente con \(\rank(A) = \rank(A A^{-})) = \trace(AA^{-})\).</li>
+<li>\(A^{-} A\) es una matriz idempotente con \(\rank(A) = \rank(A^{-} A)) = \trace(A^{-} A)\).</li>
+<li><p>
+\(P \coloneqq X \left(X^t X \right)^{-} X^t\) es una matriz idempotente con \(\rank(P) = \rank(X)\), \(PX = X\) y es única para toda inversa generalizada de \(X^t X\).
+Es fácil (cuestión de cálculo) comprobar la idempotencia y \(PX = X\).
+La igualdad de rangos es fácil por las propiedades del rango del producto.
+Veamos que es única. Seguiremos la prueba de <a class='org-ref-reference' href="#Toutenburg2009">Toutenburg2009</a> (p. 539, Theorem A.42):
+</p>
+
+<div class="proof">
+<p>
+En primer lugar consideremos una matriz simétrica \(A\) y
+dos vectores \(a\) y \(b\) del <a href="https://en.wikipedia.org/wiki/Row_and_column_spaces">espacio de columnas</a> de \(A\),
+i.e. el espacio generado por las columnas de \(A\).
+Entonces la forma bilineal \(a^t A^{-} b\) es invariante respecto a la elección de \(A^{-}\).
+Veámoslo: como \(a\) y \(b\) forman parte del espacio de columnas de \(A\),
+existen vectores \(c\) y \(d\) tales que \(a = Ac\) y \(b = Ad\).
+Entonces
+</p>
+
+\begin{align*}
+  a^t A^{-} b
+  &= c^t A^t A^{-} A d \\
+  &= c^t A d
+\end{align*}
+
+<p>
+Esta expresión no depende de \(A^{-}\).
+</p>
+
+<p>
+Si consideremos la representación por filas de \(X = \begin{pmatrix} x_{1\cdot}^t & \dots & x_{n \cdot}^t \end{pmatrix}^t\). Entonces
+</p>
+
+<p>
+\[
+    P = X \left(X^t X \right)^{-} X^t = \left( x_{i \cdot}^t \left(X^t X\right)^{-} x_{j \cdot} \right)_{ij}
+  \]
+</p>
+
+<p>
+y como \(\left(X^t X \right)\) es simétrica, todas las formas bilineales de esta expresión de \(P\) son únicas para todas las inversas generalizadas de \(\left(X^t X\right)\), y por tanto \(P\) también lo es.
+</p>
+
+</div>
+
+<div class="note">
+<p>
+\(P\) es la matriz proyección sobre el espacio vectorial generado por las columnas de \(X\), y no depende de la base elegida para el espacio vectorial.
+</p>
+
+</div></li>
+</ul>
+</div>
+</li>
+
+<li><a id="orgadeea30"></a>Aplicación a la resolución de ecuaciones lineales<br />
+<div class="outline-text-7" id="text-1-4-3-2-1-2">
+<p>
+Consideremos el sistema de ecuaciones \(AX = B\), donde \(A_{n \times m}\) y \(B_{n \times q}\) son matrices conocidas y \(X_{m \times q}\) es una matriz de incógnitas. Entonces el sistema es compatible si y solo si \(B = A A^{-} B\), para cualquier \(A^{-}\) (da igual). Esta prueba viene en <a class='org-ref-reference' href="#Toutenburg2009">Toutenburg2009</a> (p. 48, Theorem 3.1).
+</p>
+
+<p>
+Supongamos que el sistema es compatible, entonces
+</p>
+
+<ol class="org-ol">
+<li><p>
+Si \(A^{-}\) es una inversa generalizada de \(A\), entonces \(X = A^{-} B\) es una solución.
+</p>
+
+<div class="proof">
+<p>
+Si \(X = A^{-} B\), entonces \(AX = A A^{-} B = B\) por la propiedad anterior.
+</p>
+
+</div></li>
+
+<li>Si \(A^{-}\) es una inversa generalizada de \(A\), entonces la solución general viene dada por
+\[ X = A^{-} B + \left(I - A^{-} A \right) Z \]
+con \(Z\) arbitraria. Esta prueba viene también en <a class='org-ref-reference' href="#Toutenburg2009">Toutenburg2009</a> (p. 48, (3.13) y p. 555, B.1).</li>
+</ol>
+</div>
+</li>
+</ol>
+</li>
+
+<li><a id="org677b7a1"></a><span class="todo TODO">TODO</span> Solución<br />
+<div class="outline-text-6" id="text-1-4-3-2-2">
+<p>
+El \eqref{org661305d} es compatible y la solución general del mismo viene dada por
+</p>
+
+<p>
+\[
+\tilde{\beta} = \left(X^t X \right)^{-} X^t Y + \left(I - H \right) Z
+\]
+donde \(H = \left(X^t X\right)^{-} \left(X^t X\right)\) y \(Z \in \mathbb{R}^{p}\) es un vector arbitrario.
+</p>
+
+<div class="proof">
+<p>
+Veamos en primer lugar que el sistema es compatible. Para ello hay que ver que
+\[X^t Y = \left(X^t X \right) \left(X^t X \right)^{-} X^t Y\]
+y efectivamente,
+</p>
+
+\begin{align*}
+\left(X^t X \right) \left(X^t X \right)^{-} X^t Y
+&= X^t X \left(X^t X \right)^{-} X^t Y \\
+&= X^t P Y \\
+&= X^t P^t Y \\
+&= X^t Y
+\end{align*}
+
+<p>
+El último paso se obtiene trasponiendo en la igualdad \(PX = X\).
+Una vez demostrado que el sistema es compatible, la solución general viene dada por la fórmula anterior.
+</p>
+
+</div>
+
+<p>
+\(X \tilde{\beta}\) es única para toda \(\tilde{\beta}\) solución del \eqref{org661305d}.
+</p>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org795f8d8" class="outline-4">
+<h4 id="org795f8d8"><span class="section-number-4">1.4.4</span> Funciones linealmente estimables</h4>
+<div class="outline-text-4" id="text-1-4-4">
+<p>
+Decimos que un parámetro o función de parámetros es <b>linealmente estimable</b> (abreviaremos <i>l.e.</i>) si existe una combinación lineal de las observaciones cuyo valor esperado es el parámetro o función de parámetros.
+</p>
+
+<div class="note">
+<p>
+\(\lambda^t \beta\) es linealmente estimable si y solo si existe \(c\) tal que \(\lambda = X^t c\).
+Esto es fácil de ver ya que el valor esperado de una combinación lineal de las observaciones es \(\ev{c^t Y} = c^t X \beta\),
+por lo que para que sea linealmente estimable es necesario y suficiente que \(\lambda^t = c^t X\).
+</p>
+
+</div>
+
+<div class="note">
+<p>
+Una consecuencia inmediata es que el conjunto de funciones lineales de \(\beta\) linealmente estimables forman un espacio vectorial cuya dimensión es igual al rango de \(X\).
+</p>
+
+</div>
+
+<p>
+Otra propiedad es la siguiente: \(\lambda^t \beta\) es linealmente estimable si y solo si \(\lambda^t = \lambda^t H\), con \(H = \left(X^t X\right)^{-} \left(X^t X \right)\).
+</p>
+
+<p>
+Si \(\lambda^t \beta\) es una función <i>l.e.</i> y \(\tilde{\beta}\) es una solución del \eqref{org661305d}, entonces \(\lambda^t \tilde{\beta}\) es un estimador insesgado de \(\lambda^t \beta\) y además es único para toda \(\tilde{\beta}\) solución del \eqref{org661305d}.
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="org7c6b493"></a>Varianza y covarianza de las funciones linealmente estimables<br />
+<div class="outline-text-5" id="text-1-4-4-1">
+<p>
+Sea \(\lambda^t \beta\) una función linealmente estimable. Se tiene que
+</p>
+
+<p>
+\[
+    \var{\lambda^t \tilde{\beta}} = \sigma^2 \lambda^t \left(X^t X\right)^{-} \lambda
+\]
+</p>
+
+<p>
+Sean \(\lambda_1^t \beta\) y \(\lambda_2^t \beta\) dos funciones lineamlente estimables. Se tiene que
+</p>
+
+<p>
+\[
+    \cov{\lambda_1^t \tilde{\beta}}{\lambda_2^t \tilde{\beta}} = \sigma^2 \lambda_1^t \left(X^t X\right)^{-} \lambda_2
+\]
+</p>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org8d7b9d0" class="outline-4">
+<h4 id="org8d7b9d0"><span class="section-number-4">1.4.5</span> Descomposición de la variabilidad</h4>
+<div class="outline-text-4" id="text-1-4-5">
+<p>
+Podemos descomponer la variabilidad de la siguiente forma:
+\[
+\underbrace{Y^t Y}<sub>SC<sub>T</sub></sub>
+= \underbrace{\hat{Y}<sup>t</sup> \hat{Y}}<sub>SC<sub>mod</sub></sub>
+</p>
+<ul class="org-ul">
+<li>\underbrace{\left(Y - \hat{Y} \right)<sup>t</sup> \left(Y - \hat{Y} \right)}<sub>SC<sub>&epsilon;</sub></sub></li>
+</ul>
+<p>
+= Y<sup>t</sup> P Y + Y<sup>t</sup> \left(I - P \right)Y
+\]
+</p>
+
+<p>
+Llamamos
+</p>
+<dl class="org-dl">
+<dt>Suma de cuadrados total</dt><dd>\(SC_T := Y^t Y\)</dd>
+<dt>Suma de cuadrados debida al modelo</dt><dd>\(SC_{mod} := \hat{Y}^t \hat{Y}\)</dd>
+<dt>Suma de cuadrados debida al error</dt><dd>\(SC_{\varepsilon} := \left(Y - \hat{Y} \right)^t \left(Y - \hat{Y} \right)\)</dd>
+</dl>
+
+<p>
+Se tiene lo que se denomina <b>descomposición de la variabilidad total</b>:
+</p>
+
+\begin{equation}
+\label{orgfc8b886}
+\tag{SC}
+SC_{T} = SC_{mod} + SC_{\varepsilon}
+\end{equation}
+
+<p>
+#+ATTR<sub>LATEX</sub> :options [Esperanza de una forma cuadrática]
+</p>
+<div btit="(Esperanza de una forma cuadrática)" class="lemma" id="lem:ev-sq">
+<p>
+Sea \(X\) un vector aleatorio \(q\)-dimensional, con media \(\mu\) y matriz de varianzas y covarianzas \(\Sigma\), y sea \(A\) una matriz \(q \times q\). Se tiene que:
+\[
+    \ev{X^t A X} = \mu^t A \mu + \tr{(A\Sigma)}
+\]
+</p>
+
+</div>
+
+<div btit="(Esperanza de las sumas de los cuadrados)" class="theorem" id="thm:ev-sc">
+<p>
+En el Modelo Lineal, si \(r = \rank{X}\), entonces
+</p>
+\begin{align*}
+\ev{\frac{SC_{mod}}{r}} &= \frac{1}{r} \beta^t X^t X \beta + \sigma^2 \\
+\ev{\frac{SC_{\varepsilon}}{n-r}} &= \sigma^2
+\end{align*}
+
+</div>
+</div>
+
+<ol class="org-ol">
+<li><a id="orgcf7963d"></a>Cuadrados medios<br />
+<div class="outline-text-5" id="text-1-4-5-1">
+<dl class="org-dl">
+<dt>cuadrado medio debido al modelo</dt><dd>\(CM_{mod} = \frac{SC_{mod}}{r}\)</dd>
+<dt>cuadrado medio debido al error</dt><dd>\(CM_{\varepsilon} = \frac{SC_{\varepsilon}}{n-r}\)</dd>
+</dl>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-orgfb41171" class="outline-4">
+<h4 id="orgfb41171"><span class="section-number-4">1.4.6</span> <span class="todo TODO">TODO</span> Distribución e independencia de formas cuadráticas</h4>
+<div class="outline-text-4" id="text-1-4-6">
+<p>
+Las <b>formas cuadráticas</b> son variables aleatorias de la forma \(Y^t A Y\), donde \(A\) es una matriz \(n \times n\) simétrica y semidefinida positiva e \(Y\) es un vector aleatorio \(n\)-dimensional. En <a href="#org4b3277b">1</a> ya se vio que la expresión de la esperanza de una forma cuadrática es
+\[
+\ev{Y^t A Y} = \mu^t A \mu + \tr{(A \Sigma)}
+\]
+</p>
+
+<div class="theorem" id="thm:sq-indep-producto">
+<p>
+Si \(X \sim \Normal[n]{\mu}{I_{n}}\) y \(A\), \(B\) son matrices simétricas semidefinidas positivas, se tiene que \(X^t A X\) y \(X^t B X\) son independientes si y solo si \(AB = 0\).
+</p>
+
+</div>
+
+<div class="corollary" id="col:sq-indep-producto-sigma">
+<p>
+Si \(X \sim \Normal[n]{\mu}{\Sigma}\) y \(A\), \(B\) son matrices simétricas semidefinidas positivas, se tiene que \(X^t A X\) y \(X^t B X\) son independientes si y solo si \(A \Sigma B = 0\).
+</p>
+
+</div>
+
+<div class="lemma" id="lem:sq-indep-multi">
+<p>
+Si \(X \sim \Normal[n]{\mu}{I_{n}}\) y \(A_{1}, \dots, A_{k}\) son matrices simétricas semidefinidas positivas, se tiene que
+\(X^t A_{1} X, \dots, X^t A_{k} X\) son independientes 2 a 2 si y solo si son conjuntamente independientes.
+</p>
+
+</div>
+
+<div class="corollary" id="col:sq-indep-multi-sigma">
+<p>
+Si \(X \sim \Normal[n]{\mu}{\Sigma}\) y \(A_{1}, \dots, A_{k}\) son matrices simétricas semidefinidas positivas, se tiene que \(X^t A_{1} X, \dots, X^t A_{k} X\) son independientes si y solo si \(A_i \Sigma A_j = 0\ \forall i \neq j\).
+</p>
+
+</div>
+
+<div class="definition" id="def:chisq-noncentral">
+<p>
+Sea \(X \sim \Normal[n]{\mu}{\Sigma}\) y sea \(Y = X^t X\). Decimos que la variable aleatoria \(Y\) sigue una <b><b>distribución chi cuadrado no centrada</b></b> con \(n\) grados de libertad y parámetro de descentralización \(\lambda = \norm{\mu}^2 = \sum{\mu_i^2}\), y notamos \(Y \sim \chisqNC{n}{\lambda}\).
+</p>
+
+</div>
+
+<div class="theorem">
+<p>
+Si \(X \sim \Normal[n]{\mu}{I_n}\) y \(A\) es una matriz simétrica, entonces \(A\) es idempotente con rango \(\rank{A} = k\) si y solo si \(X^t A X \sim \chisqNC{k}{\lambda}\), donde \(\lambda = \mu^t A \mu\).
+</p>
+
+</div>
+
+<div class="corollary">
+<p>
+Si \(X \sim \Normal[n]{\mu}{\Sigma}\) y \(A\) es una matriz simétrica, entonces \(X^t A X \sim \chisqNC{k}{\lambda}\) con \(\lambda = \mu^t A \mu\) si y solo si \(A \Sigma\) es idempotente con \(\rank{(A \Sigma)} = k\)
+</p>
+
+</div>
+
+<div class="lemma">
+<p>
+Sean \(A_1, \dots, A_k\) matrices simétricas \(n \times n\) tales que \(I_n = \sum_{i=1}^{k} A_{i}\). Entonces son eqvuialentes:
+</p>
+
+<ol class="org-ol">
+<li>\(A_i\) es idempotente para todo \(i\).</li>
+<li>\(A_i A_j = 0\) para todo \(i \neq j\).</li>
+<li>\(\sum_{i=1}^{k} \rank{A_i} = n\).</li>
+</ol>
+
+</div>
+
+<p>
+Como consecuencia inmediata de los resultados sobre distribución e independencia de formas cuadráticas se tiene el siguiente teorema:
+</p>
+
+<div btit="(Cochran)" class="theorem" id="thm:cochran">
+<p>
+Sea \(X \sim \Normal[n]{\mu}{I_n}\) y supongamos que \(X^t X = X^t A_{1} X + \dots + X^t A_{k} X\), donde \(A_{1}, \dots, A_{k}\) son matrices simétricas semidefinidas positivas con \(\rank{A_i} = n_{i}\). Entonces se tiene que
+</p>
+
+<p>
+\[ \sum_{i=1}^{k} n_{i} = n
+\iff
+\begin{cases}
+X^t A_{i} X \sim \chisqNC{n_i}{\lambda_i},\quad \lambda_i = \mu^{t} A_{i} \mu,\ i = 1,\dots,k\\
+X^t A_{1} X, \dots, X^t A_{k} X \text{ independientes}
+\end{cases} \]
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8f1c321" class="outline-4">
+<h4 id="org8f1c321"><span class="section-number-4">1.4.7</span> <span class="todo TODO">TODO</span> Teoría normal en el Modelo Lineal</h4>
+<div class="outline-text-4" id="text-1-4-7">
+<p>
+En este apartado supondremos que el vector de errores sigue una distribución normal, \(\varepsilon \sim \Normal[n]{0}{\sigma^2 I_n}\) (y por tanto \(Y \sim \Normal[n]{X \beta}{\sigma^2 I_n}\)).
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="org14693e0"></a>Estimadores de máxima verosimilitud<br />
+<div class="outline-text-5" id="text-1-4-7-1">
+<p>
+Bajo la hipótesis de normalidad, para el parámetro \(\theta = (\beta, \sigma^2)\), la función de verosimilitud viene dada por
+\[ L(\theta) = \left( \frac{1}{2 \pi \sigma^2} \right)^{n/2} \exp \left( -\frac{1}{2\sigma^2} \norm{y - \mu}^2 \right)\]
+</p>
+\begin{align*}
+\log{L(\theta)}
+&= -\frac{n}{2} \log{(2 \pi \sigma^2)} - \frac{1}{2\sigma^2} \left(Y - X\beta\right)^t \left(Y - X\beta\right)\\
+&= -\frac{n}{2} \log{(2 \pi \sigma^2)} - \frac{1}{2\sigma^2} \left( Y^t Y + \beta^t X^t X \beta - 2 \beta^t X^t Y \right)
+\end{align*}
+
+<p>
+Derivando la segunda expresión, obtenemos
+</p>
+
+\begin{align*}
+\frac{\partial}{\partial \beta} \log{L(\theta)}
+&= 0 - \frac{1}{2\sigma^2}
+   \left( 0 + 2 X^t X\beta - 2 X^t Y \right)\\
+\frac{\partial}{\partial \sigma^2} \log{L(\theta)}
+&= \frac{2\pi}{2 \pi \sigma^2} + \frac{1}{\sigma^4} \left(Y - X\beta\right)^t \left(Y - X\beta\right)
+\end{align*}
+
+<p>
+De aquí obtenemos que los EMV serán el resultado del siguiente sistema de ecuaciones:
+</p>
+
+\begin{align*}
+X^t X \beta &= X^t Y\\
+n\sigma^2 &= \left(Y - X \beta\right)^t \left(Y - X \beta\right)
+\end{align*}
+
+<p>
+Por tanto, los EMV son:
+</p>
+
+\begin{align*}
+\hat{\beta}_{EMV} &= \left(X^t X\right)^{-} X^t Y = \tilde{\beta}\\
+\hat{\sigma}^2_{EMV} &= \frac{1}{n} \left(Y - X \tilde{\beta}\right)^t \left(Y - X \tilde{\beta}\right)\\
+&= \frac{SC_{\varepsilon}}{n}
+\end{align*}
+
+<p>
+El EMV de \(\beta\) coincide con el de mínimos cuadrados, y el de \(\sigma^2\) también, salvo constante.
+</p>
+</div>
+</li>
+
+<li><a id="org8dba036"></a>Distribución<br />
+<div class="outline-text-5" id="text-1-4-7-2">
+<p>
+Sean \(\lambda_1, \dots, \lambda_m \in \mathbb{R}^p\), de modo que \(\lambda_i^t \beta\) es linealmente estimable para todo \(1 \leq i \leq m\), con \(m \leq r\), y que la matriz
+</p>
+
+<p>
+\[
+\Lambda = \begin{pmatrix} \lambda_1^t \\ \vdots \\ \lambda_m^t \end{pmatrix}
+\]
+</p>
+
+<p>
+tiene rango \(m\). Entonces
+</p>
+
+<p>
+\[
+\Lambda \tilde{\beta} \sim \Normal[m]{\Lambda \beta}{\sigma^2 \Sigma_{\Lambda}}
+\]
+</p>
+
+<p>
+con \(\Sigma_{\Lambda} = \Lambda \left(X^t X\right)^{-} \Lambda^t\) y \(\rank{\Sigma_\Lambda} = m\).
+</p>
+
+<ul class="org-ul">
+<li>\[ \frac{SC_{\varepsilon}}{\sigma^2} \sim \chisq{n-r} \]</li>
+<li>\(\Lambda \tilde{\beta}\) y \(SC_{\varepsilon}\) son independientes</li>
+</ul>
+
+<p>
+Como consecuencia de las propiedades anteriores,
+</p>
+
+<p>
+\[
+F = \frac{1}{m} \frac{
+\left(\Lambda \tilde{\beta} - \Lambda \beta \right)^t
+\Sigma_\Lambda^{-1}
+\left(\Lambda \tilde{\beta} - \Lambda \beta \right)
+}{CM_{\varepsilon}} \sim \FSnedecor{m}{n-r}
+\]
+</p>
+</div>
+</li>
+
+<li><a id="org1850017"></a>Contraste de hipótesis<br />
+<div class="outline-text-5" id="text-1-4-7-3">
+<p>
+Consideremos el siguiente contraste:
+</p>
+
+<p>
+\[
+</p>
+\begin{cases}
+H_{0} \colon& \Lambda \beta = d\\
+H_{1} \colon& \Lambda \beta \neq d
+\end{cases}
+<p>
+\]
+</p>
+
+<p>
+donde \(\Lambda\) es una matriz \(m \times p\) como en el apartado anterior, i.e. con rango \(m\), de modo que \(\lambda_i^t \beta\) es linealmente estimable para \(1 \leq i \leq m\) y \(d \in \mathbb{R}^{m}\). Se dice entonces que \(H_{0}\) es una <b>hipótesis estimable</b>. El estadístico del test de razón de verosimilitud del contraste anterior viene dado por el del apartado anterior,
+</p>
+
+\begin{align*}
+F &= \frac{1}{m} \frac{
+\left(\Lambda \tilde{\beta} - \Lambda \beta \right)^t
+\Sigma_\Lambda^{-1}
+\left(\Lambda \tilde{\beta} - \Lambda \beta \right)
+}{CM_{\varepsilon}}\\
+&= \frac{1}{m} \frac{SC_{\varepsilon_{0}} - SC_{\varepsilon}}{CM_{\varepsilon}}\\
+&\overset{H_0}{\sim} \FSnedecor{m}{n-r}
+\end{align*}
+
+<p>
+La región crítica de este test rechaza \(H_0\) si \(F \geq \qF{m}{n-r}\).
+</p>
+</div>
+</li>
+
+
+<li><a id="orgab78148"></a>Potencia del test<br />
+<ol class="org-ol">
+<li><a id="orgd71dc5c"></a>Ejemplo<br />
+<div class="outline-text-6" id="text-1-4-7-4-1">
+<p>
+Supongamos que, basándonos en las obseraciones \(Y = ( Y_1, \dots, Y_n )\), deseamos contrastar las hipótesis
+</p>
+
+<p>
+\[\begin{cases}
+H_0 \colon& \theta \in \Theta_{0} \\
+H_1 \colon& \theta \in \Theta_{1} = \Theta \setminus \Theta_{0}
+\end{cases}\]
+</p>
+
+<p>
+Un <b>test</b> es una regla que especifica, para cada \(Y\), cuándo rechazar la hipótesis nula.
+Al conjunto de puntos del espacio muestral que nos llevan a rechazar la hipótesis nula se le llama <b>región crítica</b>.
+Al comparar la decisión tomada con el estado real podemos tenemos 4 posibilidades:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Acción</th>
+<th scope="col" class="org-left">\(\theta \in \Theta_o\)</th>
+<th scope="col" class="org-left">\(\theta \in \Theta_1\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">No rechazar \(H_0\)</td>
+<td class="org-left">correcto</td>
+<td class="org-left">Error tipo II</td>
+</tr>
+
+<tr>
+<td class="org-left">Rechazar \(H_0\)</td>
+<td class="org-left">Error tipo I</td>
+<td class="org-left">correcto</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Estos errores se cuantifican mediante sus probabilidades. Llamamos <a href="https://es.wikipedia.org/wiki/Poder_estad%C3%ADstico"><b>función potencia</b></a> a
+\[
+\operatorname{pot}(\theta) = P_\theta(\text{rechazar }H_0)
+\].
+</p>
+
+<p>
+Normalmente se especifica una cuota superior \(\alpha\) para la probabilidad de error de tipo I:
+</p>
+
+<p>
+\[
+\operatorname{pot}(\theta) \leq \alpha \quad \forall \theta \in \Theta_0
+\]
+</p>
+
+<p>
+Llamamos <b>nivel de significación</b> a \(\alpha\).
+</p>
+
+<p>
+La probabilidad de error de tipo II depende del modelo y se puede acotar eligiendo el tamaño de muestra. Consideremos \(Y_{1}, \dots, Y_{n} \sim \Normal{\mu}{\sigma^2}\) una muestra aleatoria, con \(\sigma\) conocida, y supongamos que queremos contrastar la hipótesis \(H_0 \colon \mu = \mu_0\). Consideremos la regla que rechaza \(H_0\) si \(\abs{\overline{Y} - \mu_0} > d\).
+</p>
+
+<p>
+\[
+\alpha = P_{\mu_0} \left( \abs{\overline{Y} - \mu_0} > d\right)
+\iff
+1 - \alpha = P_{\mu_0} \left( \abs{\overline{Y} - \mu_0} \leq d \right)
+\]
+</p>
+
+<p>
+Por el teorema central del límite, tenemos que
+\[
+\sqrt{n} \left(\overline{Y} - \mu\right) \sim \Normal{0}{\sigma^2}
+\]
+</p>
+
+<p>
+Por tanto,
+</p>
+
+\begin{align*}
+1 - \alpha
+&= P_{\mu_0} \left( \sqrt{n} \frac{\abs{\overline{Y}} - \mu_0}{\sigma} \leq \qnorm{1-\alpha/2} \right) \\
+&= P_{\mu_0} \left( \abs{\overline{Y} - \mu_0} \leq \frac{\sigma}{\sqrt{n}} \qnorm{1-\alpha/2} \right)
+\end{align*}
+
+<p>
+Por tanto, la región crítica rechaza que rechaza \(H_0\) si
+\[
+\abs{\overline{Y} - \mu_0} > \frac{\sigma}{\sqrt{n}} \qnorm{1-\alpha/2}
+\]
+tiene un nivel de significación \(\alpha\) para cualquier tamaño de muestra \(n\).
+</p>
+
+<p>
+Para determinar \(n\), consideremos \(\mu \neq \mu_0\). Entonces
+</p>
+
+\begin{align*}
+  \operatorname{pot}(\mu)
+  &= P_{\mu} \left( \abs{\overline{Y} - \mu_{0}} > \frac{\sigma}{\sqrt{n}} \qnorm{1-\alpha/2} \right)\\
+  &= 1 - P_{\mu} \left(-\qnorm{1-\alpha/2} + \sqrt{n}\frac{\mu_{0}-\mu}{\sigma}
+    \leq
+    \sqrt{n}\frac{\overline{Y} - \mu}{\sigma}
+    \leq
+    \sqrt{n}\frac{\mu_{0} - \mu}{\sigma} + \qnorm{1-\alpha/2} \right)\\
+  &= 1 - P \left(-\qnorm{1-\alpha/2} + \sqrt{n}\frac{\mu_{0}-\mu}{\sigma}
+    \leq
+    Z
+    \leq
+    \sqrt{n}\frac{\mu_{0} - \mu}{\sigma} + \qnorm{1-\alpha/2} \right)
+\end{align*}
+
+<p>
+donde \(Z \sim \Normal{0}{1}\).
+</p>
+
+<p>
+Así, \(\operatorname{pot}(\mu) = \operatorname{pot}(\alpha, n, d)\) donde \(d = \mu_0 - \mu\), y verifica las siguientes propiedades:
+</p>
+<ul class="org-ul">
+<li>\(\operatorname{pot}(\alpha, n, d) = \operatorname{pot}(\alpha, n, -d)\).</li>
+<li>Fijados \(\alpha\) y \(n\), \(\operatorname{pot}(\alpha, n, d\) es creciente en \(d\).</li>
+<li>Fijados \(\alpha\) y \(d\), \(\operatorname{pot}(\alpha, n, d\) es creciente en \(n\).</li>
+<li>\(\operatorname{pot}(\alpha, n, d) \geq \alpha \ \forall n \ \forall d \geq 0\).</li>
+</ul>
+
+<p>
+Fijados \(\alpha\), una diferencia mínima \(\delta_0 > 0\) y una potencia mínima \(\operatorname{pot}_0 > \alpha\), es posible determinar un tamaño de muestra mínimo \(n_0\) tal que
+\[ \operatorname{pot}(\alpha, n, d) \geq \operatorname{pot}_{0} \quad \forall n \geq n_{0} \quad \forall d \geq d_{0} \]
+</p>
+
+<p>
+Equivalentemente, si \(n \geq n_0\), entonces
+\[P_{\mu}\left(\text{error tipo II}\right) \leq 1 - \operatorname{pot}_{0} \quad \forall \mu : \abs{\mu - \mu_{0}} \geq d_{0}\]
+</p>
+
+<div class="note">
+<p>
+Como \(\lim_{d \to 0} \operatorname{pot}(\alpha, n, d) = \alpha \ \forall n\), no existe un tamaño de muestra que permita acotar la probabilidad de error de tipo \(II\) para cualquier diferencia de medias.
+</p>
+
+</div>
+</div>
+</li>
+
+<li><a id="orga213a73"></a>Modelo Lineal General<br />
+<div class="outline-text-6" id="text-1-4-7-4-2">
+<p>
+Consideremos el Modelo Lineal General \(Y = X \beta + \varepsilon\) y el contraste \(H_0 : \Lambda \beta = d\), donde \(\rank{X} = r \leq p\) y \(\Lambda\) es una matriz \(m \times p\) con rango \(m\).
+Para este contraste la región crítica del test de razón de verosimilitudes viene dada por
+</p>
+\begin{align*}
+F = \frac{1}{m} \frac{
+\left(\Lambda \tilde{\beta} - d \right)^t
+\Sigma_\Lambda^{-1}
+\left(\Lambda \tilde{\beta} - d \right)
+}{CM_{\varepsilon}} \geq \qF{m}{n-r}
+\end{align*}
+
+<p>
+donde \(\Sigma_\Lambda = \Lambda \left( X^t X \right)^{-} \Lambda^t\), pues \(F \overset{H_0}{\sim} \FSnedecor{m}{n-r}\).
+</p>
+
+<p>
+Si \(H_0\) no fuera cierta, entonces \(F\) seguiría una distribución F de Snedecor no centrada.
+</p>
+
+<div class="definition">
+<p>
+Sean \(U, V\) variables aleatorias independientes tales que \(U \sim \chisqNC{p}{\lambda}\) y \(V \sim \chisq{p}\).
+A la distribución de \(F = \frac{U/p}{V/q}\) le llamamos <b>distribución F de Snedecor no centrada</b>
+con \(p\) y \(q\) grados de libertad y parámetro de descentralización \(\lambda\), y notamos \(F \sim \FSnedecorNC{p}{q}{\lambda}\).
+</p>
+
+</div>
+
+<p>
+Si \(H_0\) no ess cierta, \(F \sim \FSnedecorNC{m}{n-r}{\lambda}\) con
+</p>
+
+<p>
+\[
+  \lambda = \frac{1}{\sigma^{2}}
+  \left(\Lambda\beta - d\right)^{t}
+  \Sigma_{\Lambda}^{-1}
+  \left(\Lambda\beta - d\right)
+\]
+</p>
+
+<p>
+En este caso general, se tienen propiedades similares a las del apartado anterior:
+</p>
+<ul class="org-ul">
+<li>La potencia crece con el tamaño muestral.</li>
+<li>La potencia crece con \(\lambda\).</li>
+<li>\(\lim_{\lambda \to 0} \operatorname{pot} = \alpha\)</li>
+</ul>
+
+<p>
+Así, no existe un \(n_{0}\) que garantice una potencia mínima \(\operatorname{pot}_0\)
+\[
+\operatorname{pot} \geq \operatorname{pot}_0 > \alpha \quad \forall n \geq n_0 \quad \forall \lambda > 0
+\]
+</p>
+
+<p>
+Para determinar el tamaño de la muestra se fijan \(\alpha\), \(\operatorname{pot}_0 \geq \alpha\) y \(\lambda_0 > 0\) y se busca \(n_0\) tal que \(\operatorname{pot} \geq \operatorname{pot}_0 > \alpha\) para todo \(n \geq n_0\) y para todo \(\lambda \geq \lambda_0\), quedando sin controlar la potencia en \(\lambda \in (0, \lambda_0)\).
+</p>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org804f1ab" class="outline-2">
+<h2 id="org804f1ab"><span class="section-number-2">2</span> <span class="todo TODO">TODO</span> Experimentos con un factor</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orgd402444" class="outline-3">
+<h3 id="orgd402444"><span class="section-number-3">2.1</span> Introducción</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Distinguiremos dos casos:
+</p>
+<dl class="org-dl">
+<dt>Efectos fijos</dt><dd>se desea contrastar la igualdad de efectos de tratamientos fijos, e.g. 5 temperaturas fijadas de antemano.</dd>
+<dt>Efectos aleatorios</dt><dd>se desea contrastar la igualdad de efectos de una población infinita de tratamientos. Para ello, se toma una muestra aleatoria, e.g. 5 temperaturas seleccionadas aleatoriamente en un intervalo.</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-org09a354e" class="outline-3">
+<h3 id="org09a354e"><span class="section-number-3">2.2</span> Modelo de efectos fijos</h3>
+<div class="outline-text-3" id="text-2-2">
+</div>
+<div id="outline-container-orgf039e90" class="outline-4">
+<h4 id="orgf039e90"><span class="section-number-4">2.2.1</span> Modelo</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<p>
+Supongamos que se dispone de \(k\) muestras independientes procedentes de sendas poblaciones, determinadas por los niveles de un factor. Supongamos que cada población se distribuye siguiendo una \(\Normal{\mu_i}{\sigma^2}\), i.e. que la varianza es la misma y difieren (o no) en la media. Las observaciones pueden expresarse como
+</p>
+
+<p>
+\[ y_{ij} = \mu_{i} + \varepsilon_{ij}\]
+</p>
+
+<p>
+donde
+</p>
+<ul class="org-ul">
+<li>\(i = 1, \dots, k\).</li>
+<li>\(j = 1, \dots, n_{i}\).</li>
+<li id="\(n_{i}\)">tamaño de la muestra en la \(i\)-ésima población.</li>
+<li id="\(y_{ij}\)">\(j\)-ésima observación en la \(i\)-ésima población (o nivel del factor)</li>
+<li id="\(\mu_{i}\)">respuesta media en la \(i\)-ésima población (\(\ev{y_{ij}} = \mu_{i}\)).</li>
+<li id="\(\varepsilon_{ij}\)">error aleatorio, \(\varepsilon_{ij} \sim \Normal{0}{\sigma^2}\) independientes e idénticamente distribuidos.</li>
+</ul>
+
+<div class="definition" id="def:balanceado">
+<p>
+Si \(n_{1} = \dots = n_{k}\), se dice que el diseño es <b>balanceado</b>.
+</p>
+
+</div>
+
+<p>
+Se puede extraer la media global en el modelo, obteniendo la siguiente representación:
+</p>
+
+<p>
+\[y_{ij} = \mu + \alpha_{i} + \varepsilon_{ij}\]
+</p>
+
+<p>
+en las mismas condiciones, donde
+</p>
+
+<dl class="org-dl">
+<dt>\(\mu\)</dt><dd>media global.</dd>
+<dt>\(\alpha_{i}\)</dt><dd>efecto del \(i\)-ésimo tratamiento.</dd>
+</dl>
+</div>
+
+<ol class="org-ol">
+<li><a id="orgca9854a"></a>Expresión matricial<br />
+<div class="outline-text-5" id="text-2-2-1-1">
+<p>
+Podemos expresar el modelo matricialmente como \(Y = X \beta + \varepsilon\), donde
+</p>
+
+\begin{align*}
+  Y &= \begin{pmatrix} y_{11} & \dots & y_{1n_{1}} & y_{21} & \dots & y_{kn_{k}} \end{pmatrix}^{t}\\
+  \varepsilon &= \begin{pmatrix} \varepsilon_{11} & \dots & \varepsilon_{1n_{1}} & \varepsilon_{21} & \dots & \varepsilon_{kn_{k}} \end{pmatrix}^{t}\\
+  \beta &= \begin{pmatrix} \mu & \alpha_{1} & \dots & \alpha_{k} \end{pmatrix}^{t}\\
+  X &= \begin{pmatrix}
+    1_{n_{1}} & 1_{n_{1}} & 0         & \dots  & 0\\
+    1_{n_{2}} & 0         & 1_{n_{2}} & \dots  & 0\\
+    \vdots    & \vdots    & \vdots    & \ddots & \vdots\\
+    1_{n_{k}} & 0         & 0         & \dots  & 1_{n_{k}}
+    \end{pmatrix}
+\end{align*}
+
+<div class="definition" id="def:matriz-diseño">
+<p>
+Llamamos <b>matriz de diseño</b> a la matriz \(X\) anterior, con dimensión \(N \times (k+1)\), con \(N = \sum_{i=1}^{k} n_{i}\), con rango \(k\).
+</p>
+
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org65b5e67" class="outline-4">
+<h4 id="org65b5e67"><span class="section-number-4">2.2.2</span> Estimación de los parámetros</h4>
+<div class="outline-text-4" id="text-2-2-2">
+<p>
+Podemos imponer \(\sum_{i=1}^{k} n_{i} \alpha_{i} = 0\), de donde obtenemos la solución del \eqref{org661305d}:
+</p>
+\begin{align*}
+  \hat{\mu} &= \overline{y}_{\cdot \cdot}\\
+  \hat{\alpha}_{i} &= \overline{y}_{i \cdot} - \overline{y}_{\cdot \cdot}
+\end{align*}
+
+<p>
+donde
+</p>
+
+\begin{align*}
+  \overline{y}_{\cdot \cdot} &= \frac{1}{N} \sum_{i=1}^{k} \sum_{j=1}^{n_{i}} y_{ij}\\
+  \overline{y}_{i \cdot} &= \frac{1}{n_{i}} \sum_{j=1}^{n_{i}} y_{ij}
+\end{align*}
+
+<p>
+En general llamaremos e.g. \(\overline{y}_{ij\cdot k \cdot}\) a la media aritmética de las observaciones con los subíndices explícitos fijos (variando los subíndices con \(\cdot\)).
+</p>
+
+<p>
+\(\lambda_{0} \mu + \sum_{i=1}^{k} \lambda_{i} \alpha_{i}\) es estimable si y solo si \(\lambda_{0} = \sum_{i=1}^{k} \lambda_{i}\).
+</p>
+
+<p>
+En ese caso, un estimador insesgado es \(\sum_{i=1}^{k} \lambda_{i} \overline{y}_{i \cdot}\).
+</p>
+
+<p>
+Como la <a href="#orgd6eed9d">matriz de diseño</a> tiene rango \(k\), un estimador insesgado de la varianza viene dado por
+</p>
+
+<p>
+\[\hat{\sigma}^{2} = \frac{SC_{\varepsilon}}{N - k}\]
+</p>
+
+<p>
+donde \(SC_{\varepsilon}\) es la suma de los cuadrados debida al error, o
+</p>
+
+<p>
+\[SC_{\varepsilon}
+  = \sum_{i=1}^{k} \sum_{j=1}^{n_{i}} \left(y_{ij} - \hat{y}_{ij}\right)^{2}
+  = \sum_{i=1}^{k} \sum_{j=1}^{n_{i}} \left(y_{ij} - \overline{y}_{i\cdot}\right)^{2} \]
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org48723ec" class="outline-4">
+<h4 id="org48723ec"><span class="section-number-4">2.2.3</span> Contraste fundamental</h4>
+<div class="outline-text-4" id="text-2-2-3">
+<p>
+El contraste fundamental de un modelo es el que tiene como hipótesis nula que los parámetros son nulos (o unitarios en un modelo multiplicativo), i.e. que los factores y/o las variables explicativas no afectan a las observaciones de la respuesta. En este caso, el contraste es
+</p>
+
+<p>
+\[ \begin{cases}
+    H_{0} \colon& \alpha_{1} = \dots = \alpha_{k}\\
+    H_{1} \colon& \exists i,j : \alpha_{i} \neq \alpha_{j}
+  \end{cases} \]
+</p>
+
+<p>
+El estadístico del test de razón de verosimilitudes para este contraste es
+</p>
+
+<p>
+\[F = \frac{SC_{\varepsilon_{0}} - SC_{\varepsilon}}{SC_{\varepsilon}} \frac{N-k}{k-1} \overset{H_{0}}{\sim} \FSnedecor{k-1}{N-k}\]
+</p>
+
+<p>
+Se tiene que
+</p>
+
+<p>
+\[ \begin{aligned}
+    SC_{\varepsilon_{0}}
+    &= SC_{tot}
+    = \sum_{i=1}^{k} \sum_{j=1}^{n_{i}} \left(y_{ij} - \overline{y}_{\cdot \cdot}\right)^{2}\\
+    SC_{tot}
+    &= SC_{\alpha} + SC_{\varepsilon}\\
+    SC_{\alpha}
+    &= \sum_{i=1}^{k} n_{i} \hat{\alpha}_{i}^{2}
+    = \sum_{i=1}^{k} n_{i} \left(\overline{y}_{i \cdot} - \overline{y}_{\cdot \cdot}\right)^{2}
+\end{aligned} \]
+</p>
+
+
+<p>
+De aquí se obtiene que
+\[F = \frac{CM_{\alpha}}{CM_{\varepsilon}} \overset{H_{0}}{\sim} \FSnedecor{k-1}{N-k}\]
+</p>
+
+<p>
+donde \[CM_{\alpha} = \frac{SC_{\alpha}}{k-1}\].
+</p>
+
+<p>
+Llamamos <b>suma de cuadrados debida al factor</b> a \(SC_{\alpha}\) y <b>cuadrado medio debido al factor</b> a \(CM_{\alpha}\).
+</p>
+
+<p>
+Los resultados obtenidos se disponen en una tabla llamada <b>tabla ANOVA</b>:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Fuente de variación</th>
+<th scope="col" class="org-left">Suma de cuadrados</th>
+<th scope="col" class="org-left">Grados de libertad</th>
+<th scope="col" class="org-left">Cuadrados medios</th>
+<th scope="col" class="org-left">F-estadístico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Factor</td>
+<td class="org-left">\(SC_{\alpha}\)</td>
+<td class="org-left">\(k-1\)</td>
+<td class="org-left">\(CM_{\alpha}\)</td>
+<td class="org-left">\(F = CM_{\alpha} / CM_{\varepsilon}\)</td>
+</tr>
+
+<tr>
+<td class="org-left">Error</td>
+<td class="org-left">\(SC_{\varepsilon}\)</td>
+<td class="org-left">\(N-k\)</td>
+<td class="org-left">\(CM_{\varepsilon}\)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Total</td>
+<td class="org-left">\(SC_{tot}\)</td>
+<td class="org-left">\(N-1\)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+
+<div class="note">
+<p>
+Cada suma de cuadradso es una forma cuadrática, i.e. un estadístico de la forma
+\[SC_{*} = Y^{t} A_{*} Y\]
+</p>
+
+<p>
+donde \(A_{ * }\) es simétrica semidefinida positiva. Los grados de libertad son el rango de \(A_{ * }\).
+</p>
+
+</div>
+
+<p>
+Otra forma de obtener el test anterior es mediante la siguiente tabla:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Fuente de variación</th>
+<th scope="col" class="org-left">Suma de cuadrados</th>
+<th scope="col" class="org-left">Grados de libertad</th>
+<th scope="col" class="org-left">\(\ev{CM_{ * }}\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Factor</td>
+<td class="org-left">\(SC_{\alpha} = \sum_{i} n_{i} \hat{\alpha}_{i}^{2}\)</td>
+<td class="org-left">\(k-1\)</td>
+<td class="org-left">\(\sigma^{2} + \frac{1}{k-1} \sum_{i} n_{i} \alpha_{i}^{2}\)</td>
+</tr>
+
+<tr>
+<td class="org-left">Error</td>
+<td class="org-left">\(SC_{\varepsilon} = \sum_{ij} \left( y_{ij} - \overline{y}_{i \cdot}\right)^{2}\)</td>
+<td class="org-left">\(N-k\)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Total</td>
+<td class="org-left">\(SC_{tot} = \sum_{ij} \left( y_{ij} - \overline{y}_{\cdot \cdot} \right)^{2}\)</td>
+<td class="org-left">\(N-1\)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Nótese que \(\ev{CM_{\alpha}} \geq \ev{CM_{\varepsilon}}\), con la igualdad se da si y solo si \(H_{0}\) es cierta.
+Por tanto, un valor grande de \(F = CM_{\alpha}/CM_{\varepsilon}\) indicaría que \(H_{0}\) no es cierta.
+Se puede obtener la distribución de \(F\) mediante el <a href="#org2cc408e">Teorema de Cochran</a>:
+</p>
+
+<p>
+\[ \underbrace{SC_{T}}_{N} = \underbrace{N \overline{y}_{\cdot \cdot}^{2}}_{1} + \underbrace{SC_{\alpha}}_{k-1} + \underbrace{SC_{\varepsilon}}_{N-k} \]
+</p>
+
+<p>
+Entonces \(SC_{\alpha}\) y \(SC_{\varepsilon}\) son independientes, \(SC_{\alpha} / \sigma^{2} \sim \chisqNC{k-1}{\lambda_{\alpha}}\) y \(SC_{\varepsilon} / \sigma^{2} \sim \chisq{N-k}\).
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orgda2ecf6" class="outline-4">
+<h4 id="orgda2ecf6"><span class="section-number-4">2.2.4</span> Comparaciones múltiples</h4>
+</div>
+
+<div id="outline-container-org6b92253" class="outline-4">
+<h4 id="org6b92253"><span class="section-number-4">2.2.5</span> Diagnosis</h4>
+</div>
+</div>
+
+<div id="outline-container-org7a7d27a" class="outline-3">
+<h3 id="org7a7d27a"><span class="section-number-3">2.3</span> Modelo de efectos aleatorios</h3>
+</div>
+
+<div id="outline-container-org4ca1b78" class="outline-3">
+<h3 id="org4ca1b78"><span class="section-number-3">2.4</span> Determinación del tamaño muestral</h3>
+</div>
+
+<div id="outline-container-orge6ff60a" class="outline-3">
+<h3 id="orge6ff60a"><span class="section-number-3">2.5</span> Programación</h3>
+</div>
+</div>
+
+<div id="outline-container-orge56a6f9" class="outline-2">
+<h2 id="orge56a6f9"><span class="section-number-2">3</span> <span class="todo TODO">TODO</span> Experimentos con 2 factores</h2>
+</div>
+
+<div id="outline-container-orgb7e6ac0" class="outline-2">
+<h2 id="orgb7e6ac0"><span class="section-number-2">4</span> <span class="todo TODO">TODO</span> Experimentos multifactoriales</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org523ffb0" class="outline-3">
+<h3 id="org523ffb0"><span class="section-number-3">4.1</span> Experimento con 3 factores completo</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+Consideremos un experimento con 3 factores A, B, C con \(a\), \(b\), \(c\) niveles respectivamente, y donde se realizan \(n \geq 2\) réplicas. El modelo es
+</p>
+
+<p>
+\[ y_{ijkm} = \mu + \alpha_{i} + \beta_{j} + \gamma_{k} + \alpha\beta_{ij} + \alpha\gamma_{ik} + \beta\gamma_{jk} + \alpha\beta\gamma_{ijk} + \varepsilon_{ijkm}\]
+</p>
+
+<p>
+El enálisis es análogo al anterior. Imponiendo que las sumas de los parámetrois sobre cada subíndice sean nulas:
+</p>
+
+<p>
+\[ \begin{gathered}
+    \sum_{i} \alpha_{i} = \sum_{j} \beta_{j} = \sum_{k} \gamma_{k} = 0\\
+    \sum_{i} \alpha\beta_{ij} = \sum_{j} \alpha\beta_{ij} = 0\\
+    \vdots\\
+    \sum_{i} \alpha\beta\gamma_{ijk} = \sum_{j} \alpha\beta\gamma_{ijk} = \sum_{k} \alpha\beta\gamma_{ijk} = 0
+\end{gathered} \]
+</p>
+
+<p>
+Se obtiene la siguiente solución del \eqref{org661305d}:
+</p>
+
+<p>
+\[
+</p>
+\begin{gathered}
+  \hat{\mu} = \overline{y}_{\cdot\cdot\cdot\cdot} \\
+  \begin{aligned}
+    \hat{\alpha}_{i} &= \overline{y}_{i \cdot \cdot \cdot} - \hat{\mu}
+    &\hat{\beta}_{j} &= \overline{y}_{\cdot j \cdot \cdot} - \hat{\mu}
+    &\hat{\gamma}_{k} &= \overline{y}_{\cdot \cdot k \cdot} - \hat{\mu}
+  \end{aligned}\\
+  \begin{aligned}
+    \widehat{\alpha\beta}_{ij} &= \overline{y}_{i j \cdot \cdot} - \hat{\alpha}_{i} - \hat{\beta}_{j} - \hat{\mu}\\
+    \widehat{\alpha\gamma}_{ik} &= \overline{y}_{i \cdot k \cdot} - \hat{\alpha}_{i} - \hat{\gamma}_{k} - \hat{\mu}\\
+    \widehat{\beta\gamma}_{jk} &= \overline{y}_{\cdot j k \cdot} - \hat{\beta}_{j} - \hat{\gamma}_{k} - \hat{\mu}
+  \end{aligned}\\
+  \widehat{\alpha\beta\gamma}_{ijk} = \overline{y}_{i j k \cdot} - \widehat{\alpha\beta}_{ij} - \widehat{\alpha\gamma}_{ik} - \widehat{\beta\gamma}_{jk} - \hat{\alpha}_{i} - \hat{\beta}_{j} - \hat{\gamma}_{k} - \hat{\mu}
+\end{gathered}
+<p>
+\]
+</p>
+
+<p>
+En general, nótese que el estimador del parámetro es la media muestral correspondiente tras descontar el efecto de los parámetros de menor orden.
+</p>
+
+<p>
+Si la hipótesis \(H_{0} \colon \alpha\beta\gamma_{ijk} = 0\ \forall i,j,k\) es rechazada, entonces las interacciones de menor orden (y los efectos principales) no pueden ser interpretados por separado.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga9fe75c" class="outline-3">
+<h3 id="orga9fe75c"><span class="section-number-3">4.2</span> Tests F aproximados: método de Satterthwaite</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+Consideremos el prroblema de contrastar \(H_{0} : \sigma^{2}_{A} = 0\) con 3 factores aleatorios. En ese caso (como se verá en <a href="#org69ed812">la sección de sumas de cuadrados</a>, no hay un \(CM_{*}\) con valor esperado
+\[ \ev{CM_{A}} - bcn \sigma_{A}^{2}  = \sigma^{2} + n \sigma^{2}_{ABC} + cn \sigma^{2}_{AB} + bn \sigma^{2}_{AC} \overset{H_{0}}{=} \ev{CM_{A}} \]
+</p>
+
+<p>
+Si \(\sigma^{2}_{AB}\) o \(\sigma^{2}_{AC}\) pueden ser considerados nulos entonces sí hay solución, e.g. si \(\sigma^{2}_{AB} = 0\), entonces un denominador para el F-test es \(CM_{AC}\) y viceversa. En caso contrario, los F-tests no serían adecuados. Sin embargo, podemos tomar una combinación lineal de cuadrados medios:
+</p>
+
+<p>
+\[ u = CM_{AB} + CM_{AC} - CM_{ABC} \]
+</p>
+
+<p>
+Esta variable aleatoria y \(CM_{A}\) son independientes, y \(\ev{u} \overset{H_{0}}{=} \ev{CM_{A}}\). Para determinar la región crítica del test
+es necesario conocer la distribución de \(F = \frac{CM_A}{u}\) bajo la hipótesis nula. La distribución de \(u\) no es exactamente una \(\chisq{}\) pero se puede aproximar por una. Recordemos lo siguiente:
+</p>
+
+<div class="remark">
+<p>
+Si \(X\) es una variable aleatoria tal que
+\[ \frac{1}{p} X \sim \chisq{\phi} \]
+</p>
+
+<p>
+Entonces \(\ev{X} = p \phi\) y \(\var{X} = 2p^{2} \phi\), luego podemos despejar
+</p>
+
+\begin{align*}
+p &= \frac{\var{X}}{2 \ev{X}}\\
+\phi &= \frac{2 \ev{X}^{2}}{\var{X}}
+\end{align*}
+
+</div>
+
+<p>
+Buscaremos \(p\) y \(\phi\) tales que \(\ev{u} = p \phi\) y \(\var{u} = 2 p^{2} \phi\).
+</p>
+
+<p>
+Tenemos lo siguiente:
+</p>
+
+\begin{align*}
+  \ev{u}
+  &= \ev{CM_{AB}} + \ev{CM_{AC}} + \ev{CM_{ABC}}\\
+  \var{u}
+  &= \var{CM_{AB}} + \var{CM_{AC}} + \var{CM_{ABC}}\\
+  &= \frac{2 \ev{CM_{AB}}^{2}}{(a-1)(b-1)}
+    +\frac{2 \ev{CM_{AC}}^{2}}{(a-1)(c-1)}
+    +\frac{2 \ev{CM_{ABC}}^{2}}{(a-1)(b-1)(c-1)}
+\end{align*}
+
+<p>
+Sustituimos \(\ev{CM}_{*}\) por sus valores observados, teniendo:
+</p>
+
+<p>
+\[ \hat{\phi} = \frac{2 \widehat{\ev{u}}^{2}}{\widehat{\var{u}}} \]
+</p>
+
+<p>
+Con esta aproximación, tenemos
+</p>
+
+\begin{align*}
+  \frac{SC_{A}}{\ev{CM_{A}}} &\sim \chisq{a-1}\\
+  \frac{u}{p} &\approx \chisq{\phi}
+\end{align*}
+
+<p>
+con \(SC_{A}\) y \(u\) independientes, por lo que
+</p>
+
+<p>
+\[ \frac{\frac{CM_{A}}{\ev{CM_{A}}}}{\frac{u}{p \phi}} = \frac{CM_{A}}{u} \frac{\ev{u}}{\ev{CM_{A}}} \approx \FSnedecor{a-1}{\phi}\]
+</p>
+
+<p>
+Como \(\ev{CM_{A}} \overset{H_{0}}{=} \ev{u}\), una región crítica aproximada para el contraste de \(H_{0}\) es
+\[ \frac{CM_{A}}{u} \geq \qF{a-1}{\hat{\phi}} \]
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0481212" class="outline-3">
+<h3 id="org0481212"><span class="section-number-3">4.3</span> Experimentos con factores cruzados y anidados</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+Supongamos que el factor B está anidado dentro del factor A, y ambos están cruzados con el factor C. Entonces el modelo es el siguiente:
+</p>
+
+<p>
+\[ y_{ijkm} = \mu + \alpha_{i} + \beta_{j(i)} + \gamma_{k} + \alpha\gamma_{ik} + \beta\gamma_{jk(i)} + \varepsilon_{m(ijk)}\]
+</p>
+
+<p>
+Nótese que no hay interacciones AB ni ABC (en general no hay interacciones que contengan el factor anidado y el factor general).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org69ed812" class="outline-3">
+<h3 id="org69ed812"><span class="section-number-3">4.4</span> Sumas de cuadrados y valores esperados de los cuadrados medios</h3>
+<div class="outline-text-3" id="text-4-4">
+<ol class="org-ol">
+<li><p>
+El modelo contiene \(\mu\), \(\varepsilon\) y todos los efectos principales e interacciones, salvo aquellas que contengan dos factores anidados.
+</p>
+
+<p>
+Los subíndices son los correspondientes tradicionalmente. Si un factor es anidado, se añade el índice correspondiente al factor maestro entre paréntesis. El término de error se representa como \(\varepsilon_{m(ijk)}\).
+</p></li>
+
+<li><p>
+Para cada término del modelo, decimos que los subíndices son:
+</p>
+
+<dl class="org-dl">
+<dt>ausente</dt><dd>no presente</dd>
+<dt>muerto</dt><dd>presente entre paréntesis</dd>
+<dt>vivo</dt><dd>presente sin paréntesis</dd>
+</dl>
+
+<p>
+Obtenemos un <i>producto simbólico</i> representando cada índice como sigue:
+</p>
+
+<dl class="org-dl">
+<dt>ausente</dt><dd>no presente.</dd>
+<dt>muerto</dt><dd>su letra, e.g. \((i) \mapsto i\).</dd>
+<dt>vivo</dt><dd><p>
+su letra menos \(1\), e.g. \(i \mapsto i-1\).
+</p>
+
+<p>
+Así, por ejemplo, el producto simbólico de \(\beta\gamma_{jk(i)}\) es \(i(j-1)(k-1)\).
+</p></dd>
+</dl></li>
+
+<li>Para el cálculo de los grados de libertad, sustituimos los subíndices por el número de niveles del factor correspondiente, e.g. \(SC_{BC(A)} \mapsto \beta\gamma_{jk(i)} \mapsto i(j-1)(k-1) \mapsto a(b-1)(c-1)\).</li>
+
+<li><p>
+Los parámetros se obtienen <i>expandiendo</i> los productos simbólicos y tomando medias muestrales dejando fijos los subíndices explícitos, e.g.
+</p>
+
+<p>
+\[i(j-1)(k-1) = ijk - ij - ik + i\]
+</p>
+
+<p>
+\[ \widehat{\beta\gamma}_{jk(i)} = \overline{y}_{ijk \cdot} - \overline{y}_{ij \cdot \cdot} - \overline{y}_{i \cdot k \cdot} + \overline{y}_{i \cdot \cdot \cdot} \]
+</p>
+
+<p>
+Alternativamente, los parámetros se obtienen a partir del modelo, tomando la media muestral correspondiente y eliminando el efecto de los parámetros de menor orden, e.g. suponiendo que B está anidado en A,
+</p>
+
+<p>
+\[ \begin{aligned}
+    \widehat{\beta\gamma}_{jk(i)}
+    &= \overline{y}_{ijk \cdot} - \widehat{\alpha\gamma}_{ik} - \hat{\alpha}_{i} - \hat{\beta}_{j(i)} - \hat{\gamma}_{k} - \hat{\mu}\\
+    &= \overline{y}_{ijk \cdot} -
+    \left( \overline{y}_{i \cdot k \cdot} - \overline{y}_{i \cdot \cdot \cdot} - \overline{y}_{\cdot\cdot k \cdot} + \overline{y}_{\cdot \cdot \cdot \cdot} \right) -
+    \left( \overline{y}_{i \cdot \cdot \cdot} - \overline{y}_{\cdot \cdot \cdot \cdot} \right) -
+    \left( \overline{y}_{ij \cdot \cdot} - \overline{y}_{i \cdot \cdot \cdot}\right) -
+    \left( \overline{y}_{\cdot \cdot k \cdot} - \overline{y}_{\cdot\cdot\cdot\cdot}\right) -
+    \overline{y}_{\cdot \cdot \cdot \cdot}\\
+    &= \underbrace{\overline{y}_{ijk \cdot} -
+    \overline{y}_{i \cdot k \cdot} + \overline{y}_{i \cdot \cdot \cdot}} + \bcancel{\overline{y}_{\cdot\cdot k \cdot}} - \xcancel{\overline{y}_{\cdot \cdot \cdot \cdot}} -
+    \cancel{\overline{y}_{i \cdot \cdot \cdot}} + \xcancel{\overline{y}_{\cdot \cdot \cdot \cdot}}
+    \underbrace{ - \overline{y}_{ij \cdot \cdot}} + \cancel{\overline{y}_{i \cdot \cdot \cdot}} -
+    \bcancel{\overline{y}_{\cdot \cdot k \cdot}} + \xcancel{\overline{y}_{\cdot\cdot\cdot\cdot}} -
+    \xcancel{\overline{y}_{\cdot \cdot \cdot \cdot}}\\
+    &= \overline{y}_{ijk \cdot} - \overline{y}_{ij \cdot \cdot} - \overline{y}_{i \cdot k \cdot} + \overline{y}_{i \cdot \cdot \cdot}
+    \end{aligned} \]
+</p></li>
+
+<li><p>
+Las expressiones de los \(SC_{*}\) se obtienen sumando el cuadrado de los parámetros, e.g.
+</p>
+
+<p>
+\[ \begin{aligned}
+       SC_{BC(A)}
+       &= \sum_{ijkm} \left( \overline{y}_{ijk \cdot} - \overline{y}_{ij \cdot \cdot} - \overline{y}_{i \cdot k \cdot} + \overline{y}_{i \cdot \cdot \cdot} \right)^{2}\\
+       &= n \sum_{ijk} \left( \overline{y}_{ijk \cdot} - \overline{y}_{ij \cdot \cdot} - \overline{y}_{i \cdot k \cdot} + \overline{y}_{i \cdot \cdot \cdot} \right)^{2}\\
+       &= n \sum_{ijk} \widehat{\beta\gamma}_{jk(i)}^{2}
+     \end{aligned} \]
+</p>
+
+<p>
+Otro ejemplo:
+</p>
+
+<p>
+\[ \begin{aligned} SC_{A}
+        &= \sum_{ijkm} \left(\overline{y}_{i \cdot \cdot \cdot} - \overline{y}_{\cdot \cdot \cdot \cdot}\right)^{2}\\
+        &= bcn \sum_{i} \left(\overline{y}_{i \cdot \cdot \cdot} - \overline{y}_{\cdot \cdot \cdot \cdot}\right)^{2}
+    \end{aligned} \]
+</p></li>
+
+<li><p>
+Para obtener el valor esperado de los cuadrados medios utilizaremos una tabla auxiliar, que se genera como sigue: cada fila corresponde a un \(CM_{*}\). Para cada fila, las celdas se rellenan según el tipo de subíndice:
+</p>
+
+<dl class="org-dl">
+<dt>ausente</dt><dd>número de niveles.</dd>
+<dt>muerto</dt><dd>\(1\).</dd>
+<dt>vivo</dt><dd>\(1\) si es un efecto aleatorio, y \(0\) si es un efecto fijo.</dd>
+</dl>
+
+<p>
+Por ejemplo, en el modelo con A y C fijos, B aleatorio y B anidado en A, la tabla auxiliar es:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">\(CM_{*}\)</th>
+<th scope="col" class="org-left">\(i\) (fijo)</th>
+<th scope="col" class="org-left">\(j\) (aleatorio)</th>
+<th scope="col" class="org-left">\(k\) (fijo)</th>
+<th scope="col" class="org-left">\(m\) (aleatorio)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">\(i\)</td>
+<td class="org-left">\(0\)</td>
+<td class="org-left">\(b\)</td>
+<td class="org-left">\(c\)</td>
+<td class="org-left">\(n\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(j(i)\)</td>
+<td class="org-left">\(1\)</td>
+<td class="org-left">\(1\)</td>
+<td class="org-left">\(c\)</td>
+<td class="org-left">\(n\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(k\)</td>
+<td class="org-left">\(a\)</td>
+<td class="org-left">\(b\)</td>
+<td class="org-left">\(0\)</td>
+<td class="org-left">\(n\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(ik\)</td>
+<td class="org-left">\(0\)</td>
+<td class="org-left">\(b\)</td>
+<td class="org-left">\(0\)</td>
+<td class="org-left">\(n\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(jk(i)\)</td>
+<td class="org-left">\(1\)</td>
+<td class="org-left">\(1\)</td>
+<td class="org-left">\(0\)</td>
+<td class="org-left">\(n\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(m(ijk)\)</td>
+<td class="org-left">\(1\)</td>
+<td class="org-left">\(1\)</td>
+<td class="org-left">\(1\)</td>
+<td class="org-left">\(1\)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Para obtener \(\ev{CM_{*}}\), se tapan las columnas asociadas a los subíndices correspondientes. El producto de los números visibles en la tabla se multiplica por la correspondiente componente de la varianza en las filas en las que todos los subíndices estén presentes (no importa si vivos o muertos), e.g.
+</p>
+
+<p>
+\[ \ev{CM_{A}} = bcn \sigma^{2}_{A} + cn \sigma^{2}_{B(A)} + \sigma^{2} \]
+\[ \ev{CM_{AC}} = bn \sigma^{2}_{AC} + n \sigma^{2}_{BC(A)} + \sigma^{2} \]
+\[ \ev{CM_{BC(A)}} = n\sigma^{2}_{BC(A)} + \sigma^{2}\]
+</p></li>
+</ol>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-org0d9cc86" class="outline-2">
+<h2 id="org0d9cc86"><span class="section-number-2">5</span> <span class="todo TODO">TODO</span> Diseños en bloques</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+En los diseños en bloques se busca eliminar el efecto de una variable en el modelo. Por ejemplo, supongamos un experimento en el que se comprueba la eficiencia de varios tipos de gasolina y se utilizan varios modelos de coche para el experimento. La variabilidad de las observaciones incluye tanto el error aleatorio como la variabilidad por los diferentes modelos de coche.
+</p>
+</div>
+
+<div id="outline-container-org5720364" class="outline-3">
+<h3 id="org5720364"><span class="section-number-3">5.1</span> Diseño en bloques completos</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+En este diseño, se prueban todos los tratamientos en todos los bloques exactamente una vez, en un orden aleatorio. El modelo es
+</p>
+
+<p>
+\[y_{ij} = \mu + \alpha_{i} + \beta_{j} + \varepsilon_{ij}\]
+</p>
+
+<p>
+donde \(i = 1, \dots, t\), \(j = 1, \dots, b\) (hay \(t\) tratamientos y \(b\) bloques). Las estimaciones son análogas al modelo de dos factores sin interacción.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbd8553d" class="outline-3">
+<h3 id="orgbd8553d"><span class="section-number-3">5.2</span> Diseño en cuadrado latino</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+Supongamos que las unidades experimentales presentan 2 fuentes de variación que se desean eliminar. Si el factor principal tiene \(p\) niveles y cada factor secundario tiene \(p\) niveles, el experimento completo requeriría \(p^{3}\) pruebas. Un modo de reducir el número de ensayos es considerar un esquema donde cada tratamiento sea ensayado solo una vez en cada nivel de los factores secundarios, obteniendo \(p^{2}\) pruebas.
+</p>
+
+<p>
+Uno de los diseños que consigue este objetivo es el <b>diseño en cuadrado latino</b>.
+Un cuadrado latino de lado \(p\) es una matriz \(p \times p\) cuyos elementos son letras latinas repetidas \(p\) veces de modo que cada letra aparece exactamente una vez en cada fila y en cada columna.
+Dos ejemplos son:
+</p>
+
+<p>
+\[   \begin{matrix}
+   A & B & C & D & E\\
+   B & C & D & E & A\\
+   C & D & E & A & B\\
+   D & E & A & B & C\\
+   E & A & B & C & D
+  \end{matrix} \]
+</p>
+
+<p>
+\[   \begin{matrix}
+    A & B & C & D & E\\
+    C & D & E & A & B\\
+    E & A & B & C & D\\
+    B & C & D & E & A\\
+    D & E & A & B & C
+  \end{matrix} \]
+</p>
+
+<p>
+Para realizar un diseño en cuadrado latino se selecciona un cuadrado latino y se asignan de manera aleatoria los niveles de los factores secundarios con las filas y las columnas, y cada letra con los tratamientos del factor principal.
+</p>
+
+<p>
+El modelo es completamente aditivo.
+</p>
+</div>
+
+<div id="outline-container-orge1abaa1" class="outline-4">
+<h4 id="orge1abaa1"><span class="section-number-4">5.2.1</span> Diseño en cuadrado grecolatino</h4>
+<div class="outline-text-4" id="text-5-2-1">
+<p>
+Se pueden superponer dos cuadrados latinos notados con letras latinas y griegas respectivamente. Si estos cuadrados cumplen la propiedad de que cada letra latina coincide exactamente una vez con cada letra griega, se dice que los cuadrados son <b>ortogonales</b>. La superposición de dos cuadrados latinos ortogonales en estas condiciones se denomina <b>cuadrado grecolatino</b>, y permite eliminar 3 fuentes de variación.
+</p>
+
+<p>
+El análisis es similar al del diseño en cuadrado latino.
+</p>
+
+<p>
+Pueden incorporarse más cuadrados ortogonales a los anteriores, denóminandose <b>cuadrados hipergrecolatinos</b>. Los grados de libertad para el error son \((p-1)(p-1-\ell\)\) donde hay \(\ell\) cuadrados latinos.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc08a715" class="outline-3">
+<h3 id="orgc08a715"><span class="section-number-3">5.3</span> <span class="todo TODO">TODO</span> Diseño por bloques incompletos balanceado</h3>
+</div>
+
+<div id="outline-container-org2d65342" class="outline-3">
+<h3 id="org2d65342"><span class="section-number-3">5.4</span> <span class="todo TODO">TODO</span> Diseño en cuadrado de Youden</h3>
+<div class="outline-text-3" id="text-5-4">
+<p>
+El diseño en cuadrado de Youden es un diseño análogo al diseño en cuadrado latino pero con bloques incompletos. Es un diseño en bloques incompletos balanceado simétrico en el que la posición de los niveles del tratamiento en cada bloque se identifica con los niveles del bloque con menor número de niveles.
+</p>
+
+<p>
+Un cuadrado de Youden es un cuadrado latino con una o más columnas (o filas) eliminadas. Hay que tener cuidado de que todos los tratamientos sean ensayados en cada nivel del bloque con más niveles y que en cada nivel del bloque pequeño los tratamientos sean ensayados una o ninguna vez, de modo que cada par de tratamientos aparezcan juntos el mismo número \(\lambda\) de veces, \(\lambda = r(r-1)/(t-1)\).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org84dcf00" class="outline-2">
+<h2 id="org84dcf00"><span class="section-number-2">6</span> <span class="todo TODO">TODO</span> Análisis de la covarianza</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Consideramos un modelo en el que, además de los niveles de los factores, contamos con variables cuantitativas linealmente relacionadas con \(Y\), que no están controladas por el experimentador pero pueden ser observadas junto con la respuesta. El modelo que describe el experimento es
+</p>
+
+\begin{equation}
+\label{org71e91b0}
+\ev{Y} = X \beta + Z \gamma
+\end{equation}
+
+<p>
+donde \(\beta\) es un vector de parámetros con los efectos de los factores y \(\gamma\) es un vector de parámetros con los coeficientes de regresión de las otras covariables.
+</p>
+</div>
+
+<div id="outline-container-orge2e1026" class="outline-3">
+<h3 id="orge2e1026"><span class="section-number-3">6.1</span> Estimación</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+Como el modelo ANCOVA no es más que un caso particular del modelo lineal general estudiado en el tema 2, para estimar los parámetros podríamos aplicar directamente el método de mínimos cuadrados
+</p>
+
+<p>
+\[\ev{Y} = X \beta + Z \gamma = \begin{pmatrix} X & Z \end{pmatrix} \begin{pmatrix} \beta \\ \gamma \end{pmatrix} = W \delta\]
+</p>
+
+<p>
+con \(\hat{\delta} = \left(W^t W \right)^{-} W^t Y\) y \(\var{\hat{\delta}} = \sigma^{2} \left(W^t W\right)^{-}\). Otra forma, que reduce la cantidad de cálculo, es el siguiente método.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1bc308c" class="outline-3">
+<h3 id="org1bc308c"><span class="section-number-3">6.2</span> Método de mínimos cuadrados en dos pasos</h3>
+<div class="outline-text-3" id="text-6-2">
+<ol class="org-ol">
+<li><p>
+En este método, primero se calculan los estimadores de mínimos cuadrados y la \(SC_{\varepsilon}\) del modelo ANOVA sin tener en cuenta las covariables:
+\[\ev{Y} = X \beta\]
+</p>
+
+<p>
+con \(\hat{\beta}_{(1)} = \left(X^t X \right)^{-} X^t Y\) y \(SC_{\varepsilon(1)} = Y^t R Y\), donde \(R = I_{n} - X \left(X^t X \right)^{-} X^t\).
+</p></li>
+
+<li>Para obtener \(\hat{\gamma}\), se reemplaza \(Y \mapsto Y - Z \gamma\) en la expresión de \(SC_{\varepsilon(1)}\) y a continuación se minimiza con respecto a \(\gamma\):
+  \begin{align*}
+r &amp;= \left(Y - Z&gamma;\right)<sup>t</sup> R \left(Y - Z&gamma;)<br />
+  &amp;= Y<sup>t</sup> R Y - Y<sup>t</sup> R Z &gamma; - &gamma;<sup>t</sup> Z<sup>t</sup> R Y + &gamma;<sup>t</sup> Z<sup>t</sup> R Z &gamma;</li>
+</ol>
+<p>
+\end{align*}
+</p>
+
+<p>
+El mínimo se alcanza en
+</p>
+
+<p>
+\[ 0 = \frac{\partial}{\partial \gamma} r = -2 Z^t R Y + 2 Z^t R Z \gamma \]
+</p>
+
+<p>
+Así que el estimador es
+    \[\hat{\gamma} = \left(Z^{t} R Z\right)^{-1} Z^{t} R Y\]
+</p>
+
+<ol class="org-ol">
+<li><p>
+Para obtener el estimador de mínimos cuadrados de \(\beta\) en el modelo completo, se reemplaza \(Y \mapsto Y - Z \hat{\gamma}\) en la expresión de \(\hat{\beta}_{(1)}\).
+</p>
+
+<p>
+\[\hat{\beta} = \left(X^{t} X)^{-} X^{t} \left(Y - Z \hat{\gamma})\]
+</p></li>
+
+<li><p>
+La suma de cuadrados debida al error es el valor mínimo de \(r\):
+</p>
+
+<p>
+\[SC_{\varepsilon} = \min r = \left(Y - Z \hat{\gamma})^{t} R \left(Y - Z \hat{\gamma})\]
+</p>
+
+<p>
+con grados de libertad \(gl(SC_{\varepsilon}) = gl(SC_{\varepsilon(1)}) - \dim(\gamma)\).
+</p></li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org850e8ed" class="outline-3">
+<h3 id="org850e8ed"><span class="section-number-3">6.3</span> Contrastes de hipótesis</h3>
+<div class="outline-text-3" id="text-6-3">
+</div>
+<div id="outline-container-org697f329" class="outline-4">
+<h4 id="org697f329"><span class="section-number-4">6.3.1</span> Igualdad de efectos de los tratamientos</h4>
+<div class="outline-text-4" id="text-6-3-1">
+<p>
+El contraste es \(H_{01} : \alpha_{1} = \dots = \alpha_{I}\). Bajo esta hipótesis nula, el modelo es
+\[ \ev{y_{ij} = \mu +  \gamma z_{ij} \]
+</p>
+
+<p>
+Aplicando el método de mínimos cuadrados en dos pasos para el modelo bajo la hipótesis nula, se obtiene que el estadístico \(F\) para el contraste es:
+</p>
+
+<p>
+\[ F = \frac{SC_{\varepsilon\ {01}} - SC_{\varepsilon}}{SC_{\varepsilon}} \frac{N-I-1}{I-1}\]
+</p>
+
+<p>
+donde \(SC_{\varepsilon\ {01}} = \min r = \sum_{i,j} \left( y_{ij} - \overline{y}_{\cdot \cdot} - \hat{\gamma}_{01}(z_{ij} - \overline{z}_{\cdot \cdot}) \right)^{2}\)
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9550682" class="outline-4">
+<h4 id="org9550682"><span class="section-number-4">6.3.2</span> Nulidad de los coeficientes de regresión</h4>
+<div class="outline-text-4" id="text-6-3-2">
+<p>
+El contraste es \(H_{02} : \gamma = 0\). Bajo la hipótesis nula, el modelo es
+\[\ev{y_{ij}} = \mu + \alpha_{i}\] y para este modelo \(SC_{\varepsilon\ {02}} = SC_{\varepsilon(1)} = \sum_{i,j} \left(y_{ij} - \overline{y}_{i \cdot}\right)^{2}\)
+</p>
+
+<p>
+Por tanto, el estadístico \(F\) es
+\[F = \frac{SC_{\varepsilon(1)} - SC_{\varepsilon}}{SC_{\varepsilon}} \frac{N-I-1}{1}\]
+</p>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgf9a6ac2" class="outline-2">
+<h2 id="orgf9a6ac2"><span class="section-number-2">7</span> Bibliografía</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+<a id="orgd67502c"></a>
+
+</p>
+
+<p>
+<a id="orgadfb9a1"></a>
+<h1 class='org-ref-bib-h1'>Bibliography</h1>
+<ul class='org-ref-bib'><li><a id="DEx">[DEx]</a> <a name="DEx"></a>Jiménez Gamero, Diseño de Experimentos, (2019).</li>
+<li><a id="Montgomery2017">[Montgomery2017]</a> <a name="Montgomery2017"></a>Douglas Montgomery, Design and Analysis of Experiments, John Wiley & Sons (2017).</li>
+<li><a id="Toutenburg2009">[Toutenburg2009]</a> <a name="Toutenburg2009"></a>Helge Toutenburg, Statistical Analysis of Designed Experiments, Third Edition, Springer-Verlag New York (2009).</li>
+</ul>
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: 2020</p>
+<p class="author">Author: Carlos José Ruiz-Henestrosa Ruiz</p>
+<p class="date">Created: 2020-09-02 Wed 17:43</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
