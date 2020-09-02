@@ -1,7 +1,7 @@
 window.MathJax = {
-    loader: {load: ['[tex]/physics']},
+    loader: {load: ['[tex]/physics', '[tex]/cancel']},
     tex: {
-        packages: {'[+]': ['physics']},
+        packages: {'[+]': ['physics', 'cancel']},
         macros: {
             ev: ['\\operatorname{\\mathbb{E}}\\left[#1\\right]', 1],
             var: ['\\operatorname{var}\\left(#1\\right)', 1],

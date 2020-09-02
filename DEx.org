@@ -796,9 +796,321 @@ Entonces \(SC_{\alpha}\) y \(SC_{\varepsilon}\) son independientes, \(SC_{\alpha
 
 * TODO Experimentos multifactoriales
 
+** Experimento con 3 factores completo
+
+Consideremos un experimento con 3 factores A, B, C con \(a\), \(b\), \(c\) niveles respectivamente, y donde se realizan \(n \geq 2\) réplicas. El modelo es
+
+\[ y_{ijkm} = \mu + \alpha_{i} + \beta_{j} + \gamma_{k} + \alpha\beta_{ij} + \alpha\gamma_{ik} + \beta\gamma_{jk} + \alpha\beta\gamma_{ijk} + \varepsilon_{ijkm}\]
+
+El enálisis es análogo al anterior. Imponiendo que las sumas de los parámetrois sobre cada subíndice sean nulas:
+
+\[ \begin{gathered}
+    \sum_{i} \alpha_{i} = \sum_{j} \beta_{j} = \sum_{k} \gamma_{k} = 0\\
+    \sum_{i} \alpha\beta_{ij} = \sum_{j} \alpha\beta_{ij} = 0\\
+    \vdots\\
+    \sum_{i} \alpha\beta\gamma_{ijk} = \sum_{j} \alpha\beta\gamma_{ijk} = \sum_{k} \alpha\beta\gamma_{ijk} = 0
+\end{gathered} \]
+
+Se obtiene la siguiente solución del [[eq:lm-sen]]:
+
+\[
+  \begin{gathered}
+    \hat{\mu} = \overline{y}_{\cdot\cdot\cdot\cdot} \\
+    \begin{aligned}
+      \hat{\alpha}_{i} &= \overline{y}_{i \cdot \cdot \cdot} - \hat{\mu}
+      &\hat{\beta}_{j} &= \overline{y}_{\cdot j \cdot \cdot} - \hat{\mu}
+      &\hat{\gamma}_{k} &= \overline{y}_{\cdot \cdot k \cdot} - \hat{\mu}
+    \end{aligned}\\
+    \begin{aligned}
+      \widehat{\alpha\beta}_{ij} &= \overline{y}_{i j \cdot \cdot} - \hat{\alpha}_{i} - \hat{\beta}_{j} - \hat{\mu}\\
+      \widehat{\alpha\gamma}_{ik} &= \overline{y}_{i \cdot k \cdot} - \hat{\alpha}_{i} - \hat{\gamma}_{k} - \hat{\mu}\\
+      \widehat{\beta\gamma}_{jk} &= \overline{y}_{\cdot j k \cdot} - \hat{\beta}_{j} - \hat{\gamma}_{k} - \hat{\mu}
+    \end{aligned}\\
+    \widehat{\alpha\beta\gamma}_{ijk} = \overline{y}_{i j k \cdot} - \widehat{\alpha\beta}_{ij} - \widehat{\alpha\gamma}_{ik} - \widehat{\beta\gamma}_{jk} - \hat{\alpha}_{i} - \hat{\beta}_{j} - \hat{\gamma}_{k} - \hat{\mu}
+  \end{gathered}
+\]
+
+En general, nótese que el estimador del parámetro es la media muestral correspondiente tras descontar el efecto de los parámetros de menor orden.
+
+Si la hipótesis \(H_{0} \colon \alpha\beta\gamma_{ijk} = 0\ \forall i,j,k\) es rechazada, entonces las interacciones de menor orden (y los efectos principales) no pueden ser interpretados por separado.
+
+** Tests F aproximados: método de Satterthwaite
+
+Consideremos el prroblema de contrastar \(H_{0} : \sigma^{2}_{A} = 0\) con 3 factores aleatorios. En ese caso (como se verá en [[* Sumas de cuadrados y valores esperados de los cuadrados medios][la sección de sumas de cuadrados]], no hay un \(CM_{*}\) con valor esperado
+\[ \ev{CM_{A}} - bcn \sigma_{A}^{2}  = \sigma^{2} + n \sigma^{2}_{ABC} + cn \sigma^{2}_{AB} + bn \sigma^{2}_{AC} \overset{H_{0}}{=} \ev{CM_{A}} \]
+
+Si \(\sigma^{2}_{AB}\) o \(\sigma^{2}_{AC}\) pueden ser considerados nulos entonces sí hay solución, e.g. si \(\sigma^{2}_{AB} = 0\), entonces un denominador para el F-test es \(CM_{AC}\) y viceversa. En caso contrario, los F-tests no serían adecuados. Sin embargo, podemos tomar una combinación lineal de cuadrados medios:
+
+\[ u = CM_{AB} + CM_{AC} - CM_{ABC} \]
+
+Esta variable aleatoria y \(CM_{A}\) son independientes, y \(\ev{u} \overset{H_{0}}{=} \ev{CM_{A}}\). Para determinar la región crítica del test
+es necesario conocer la distribución de \(F = \frac{CM_A}{u}\) bajo la hipótesis nula. La distribución de \(u\) no es exactamente una \(\chisq{}\) pero se puede aproximar por una. Recordemos lo siguiente:
+
+#+BEGIN_remark
+Si \(X\) es una variable aleatoria tal que
+\[ \frac{1}{p} X \sim \chisq{\phi} \]
+
+Entonces \(\ev{X} = p \phi\) y \(\var{X} = 2p^{2} \phi\), luego podemos despejar
+
+\begin{align*}
+p &= \frac{\var{X}}{2 \ev{X}}\\
+\phi &= \frac{2 \ev{X}^{2}}{\var{X}}
+\end{align*}
+#+END_remark
+
+Buscaremos \(p\) y \(\phi\) tales que \(\ev{u} = p \phi\) y \(\var{u} = 2 p^{2} \phi\).
+
+Tenemos lo siguiente:
+
+\begin{align*}
+  \ev{u}
+  &= \ev{CM_{AB}} + \ev{CM_{AC}} + \ev{CM_{ABC}}\\
+  \var{u}
+  &= \var{CM_{AB}} + \var{CM_{AC}} + \var{CM_{ABC}}\\
+  &= \frac{2 \ev{CM_{AB}}^{2}}{(a-1)(b-1)}
+    +\frac{2 \ev{CM_{AC}}^{2}}{(a-1)(c-1)}
+    +\frac{2 \ev{CM_{ABC}}^{2}}{(a-1)(b-1)(c-1)}
+\end{align*}
+
+Sustituimos \(\ev{CM}_{*}\) por sus valores observados, teniendo:
+
+\[ \hat{\phi} = \frac{2 \widehat{\ev{u}}^{2}}{\widehat{\var{u}}} \]
+
+Con esta aproximación, tenemos
+
+\begin{align*}
+  \frac{SC_{A}}{\ev{CM_{A}}} &\sim \chisq{a-1}\\
+  \frac{u}{p} &\approx \chisq{\phi}
+\end{align*}
+
+con \(SC_{A}\) y \(u\) independientes, por lo que
+
+\[ \frac{\frac{CM_{A}}{\ev{CM_{A}}}}{\frac{u}{p \phi}} = \frac{CM_{A}}{u} \frac{\ev{u}}{\ev{CM_{A}}} \approx \FSnedecor{a-1}{\phi}\]
+
+Como \(\ev{CM_{A}} \overset{H_{0}}{=} \ev{u}\), una región crítica aproximada para el contraste de \(H_{0}\) es
+\[ \frac{CM_{A}}{u} \geq \qF{a-1}{\hat{\phi}} \]
+
+** Experimentos con factores cruzados y anidados
+
+Supongamos que el factor B está anidado dentro del factor A, y ambos están cruzados con el factor C. Entonces el modelo es el siguiente:
+
+\[ y_{ijkm} = \mu + \alpha_{i} + \beta_{j(i)} + \gamma_{k} + \alpha\gamma_{ik} + \beta\gamma_{jk(i)} + \varepsilon_{m(ijk)}\]
+
+Nótese que no hay interacciones AB ni ABC (en general no hay interacciones que contengan el factor anidado y el factor general).
+
+** Sumas de cuadrados y valores esperados de los cuadrados medios
+
+1. El modelo contiene \(\mu\), \(\varepsilon\) y todos los efectos principales e interacciones, salvo aquellas que contengan dos factores anidados.
+
+   Los subíndices son los correspondientes tradicionalmente. Si un factor es anidado, se añade el índice correspondiente al factor maestro entre paréntesis. El término de error se representa como \(\varepsilon_{m(ijk)}\).
+
+2. Para cada término del modelo, decimos que los subíndices son:
+
+   - ausente :: no presente
+   - muerto :: presente entre paréntesis
+   - vivo :: presente sin paréntesis
+
+   Obtenemos un /producto simbólico/ representando cada índice como sigue:
+  
+   - ausente :: no presente.
+   - muerto :: su letra, e.g. \((i) \mapsto i\).
+   - vivo :: su letra menos \(1\), e.g. \(i \mapsto i-1\).
+
+     Así, por ejemplo, el producto simbólico de \(\beta\gamma_{jk(i)}\) es \(i(j-1)(k-1)\).
+
+3. Para el cálculo de los grados de libertad, sustituimos los subíndices por el número de niveles del factor correspondiente, e.g. \(SC_{BC(A)} \mapsto \beta\gamma_{jk(i)} \mapsto i(j-1)(k-1) \mapsto a(b-1)(c-1)\).
+
+4. Los parámetros se obtienen /expandiendo/ los productos simbólicos y tomando medias muestrales dejando fijos los subíndices explícitos, e.g.
+  
+   \[i(j-1)(k-1) = ijk - ij - ik + i\]
+
+   \[ \widehat{\beta\gamma}_{jk(i)} = \overline{y}_{ijk \cdot} - \overline{y}_{ij \cdot \cdot} - \overline{y}_{i \cdot k \cdot} + \overline{y}_{i \cdot \cdot \cdot} \]
+
+   Alternativamente, los parámetros se obtienen a partir del modelo, tomando la media muestral correspondiente y eliminando el efecto de los parámetros de menor orden, e.g. suponiendo que B está anidado en A,
+
+    \[ \begin{aligned}
+    \widehat{\beta\gamma}_{jk(i)}
+    &= \overline{y}_{ijk \cdot} - \widehat{\alpha\gamma}_{ik} - \hat{\alpha}_{i} - \hat{\beta}_{j(i)} - \hat{\gamma}_{k} - \hat{\mu}\\
+    &= \overline{y}_{ijk \cdot} -
+    \left( \overline{y}_{i \cdot k \cdot} - \overline{y}_{i \cdot \cdot \cdot} - \overline{y}_{\cdot\cdot k \cdot} + \overline{y}_{\cdot \cdot \cdot \cdot} \right) -
+    \left( \overline{y}_{i \cdot \cdot \cdot} - \overline{y}_{\cdot \cdot \cdot \cdot} \right) -
+    \left( \overline{y}_{ij \cdot \cdot} - \overline{y}_{i \cdot \cdot \cdot}\right) -
+    \left( \overline{y}_{\cdot \cdot k \cdot} - \overline{y}_{\cdot\cdot\cdot\cdot}\right) -
+    \overline{y}_{\cdot \cdot \cdot \cdot}\\
+    &= \underbrace{\overline{y}_{ijk \cdot} -
+    \overline{y}_{i \cdot k \cdot} + \overline{y}_{i \cdot \cdot \cdot}} + \bcancel{\overline{y}_{\cdot\cdot k \cdot}} - \xcancel{\overline{y}_{\cdot \cdot \cdot \cdot}} -
+    \cancel{\overline{y}_{i \cdot \cdot \cdot}} + \xcancel{\overline{y}_{\cdot \cdot \cdot \cdot}}
+    \underbrace{ - \overline{y}_{ij \cdot \cdot}} + \cancel{\overline{y}_{i \cdot \cdot \cdot}} -
+    \bcancel{\overline{y}_{\cdot \cdot k \cdot}} + \xcancel{\overline{y}_{\cdot\cdot\cdot\cdot}} -
+    \xcancel{\overline{y}_{\cdot \cdot \cdot \cdot}}\\
+    &= \overline{y}_{ijk \cdot} - \overline{y}_{ij \cdot \cdot} - \overline{y}_{i \cdot k \cdot} + \overline{y}_{i \cdot \cdot \cdot}
+    \end{aligned} \]
+
+5. Las expressiones de los \(SC_{*}\) se obtienen sumando el cuadrado de los parámetros, e.g.
+
+      \[ \begin{aligned}
+       SC_{BC(A)}
+       &= \sum_{ijkm} \left( \overline{y}_{ijk \cdot} - \overline{y}_{ij \cdot \cdot} - \overline{y}_{i \cdot k \cdot} + \overline{y}_{i \cdot \cdot \cdot} \right)^{2}\\
+       &= n \sum_{ijk} \left( \overline{y}_{ijk \cdot} - \overline{y}_{ij \cdot \cdot} - \overline{y}_{i \cdot k \cdot} + \overline{y}_{i \cdot \cdot \cdot} \right)^{2}\\
+       &= n \sum_{ijk} \widehat{\beta\gamma}_{jk(i)}^{2}
+     \end{aligned} \]
+
+   Otro ejemplo:
+
+    \[ \begin{aligned} SC_{A}
+        &= \sum_{ijkm} \left(\overline{y}_{i \cdot \cdot \cdot} - \overline{y}_{\cdot \cdot \cdot \cdot}\right)^{2}\\
+        &= bcn \sum_{i} \left(\overline{y}_{i \cdot \cdot \cdot} - \overline{y}_{\cdot \cdot \cdot \cdot}\right)^{2}
+    \end{aligned} \]
+
+6. Para obtener el valor esperado de los cuadrados medios utilizaremos una tabla auxiliar, que se genera como sigue: cada fila corresponde a un \(CM_{*}\). Para cada fila, las celdas se rellenan según el tipo de subíndice:
+
+   - ausente :: número de niveles.
+   - muerto :: \(1\).
+   - vivo :: \(1\) si es un efecto aleatorio, y \(0\) si es un efecto fijo.
+
+   Por ejemplo, en el modelo con A y C fijos, B aleatorio y B anidado en A, la tabla auxiliar es:
+
+   | \(CM_{*}\) | \(i\) (fijo) | \(j\) (aleatorio) | \(k\) (fijo) | \(m\) (aleatorio) |
+   |------------+--------------+-------------------+--------------+-------------------|
+   | \(i\)      | \(0\)        | \(b\)             | \(c\)        | \(n\)             |
+   | \(j(i)\)   | \(1\)        | \(1\)             | \(c\)        | \(n\)             |
+   | \(k\)      | \(a\)        | \(b\)             | \(0\)        | \(n\)             |
+   | \(ik\)     | \(0\)        | \(b\)             | \(0\)        | \(n\)             |
+   | \(jk(i)\)  | \(1\)        | \(1\)             | \(0\)        | \(n\)             |
+   | \(m(ijk)\) | \(1\)        | \(1\)             | \(1\)        | \(1\)             |
+
+   Para obtener \(\ev{CM_{*}}\), se tapan las columnas asociadas a los subíndices correspondientes. El producto de los números visibles en la tabla se multiplica por la correspondiente componente de la varianza en las filas en las que todos los subíndices estén presentes (no importa si vivos o muertos), e.g.
+
+   \[ \ev{CM_{A}} = bcn \sigma^{2}_{A} + cn \sigma^{2}_{B(A)} + \sigma^{2} \]
+   \[ \ev{CM_{AC}} = bn \sigma^{2}_{AC} + n \sigma^{2}_{BC(A)} + \sigma^{2} \]
+   \[ \ev{CM_{BC(A)}} = n\sigma^{2}_{BC(A)} + \sigma^{2}\]
+
+
+
+
 * TODO Diseños en bloques
 
+En los diseños en bloques se busca eliminar el efecto de una variable en el modelo. Por ejemplo, supongamos un experimento en el que se comprueba la eficiencia de varios tipos de gasolina y se utilizan varios modelos de coche para el experimento. La variabilidad de las observaciones incluye tanto el error aleatorio como la variabilidad por los diferentes modelos de coche.
+
+** Diseño en bloques completos
+En este diseño, se prueban todos los tratamientos en todos los bloques exactamente una vez, en un orden aleatorio. El modelo es
+
+\[y_{ij} = \mu + \alpha_{i} + \beta_{j} + \varepsilon_{ij}\]
+
+donde \(i = 1, \dots, t\), \(j = 1, \dots, b\) (hay \(t\) tratamientos y \(b\) bloques). Las estimaciones son análogas al modelo de dos factores sin interacción.
+
+** Diseño en cuadrado latino
+Supongamos que las unidades experimentales presentan 2 fuentes de variación que se desean eliminar. Si el factor principal tiene \(p\) niveles y cada factor secundario tiene \(p\) niveles, el experimento completo requeriría \(p^{3}\) pruebas. Un modo de reducir el número de ensayos es considerar un esquema donde cada tratamiento sea ensayado solo una vez en cada nivel de los factores secundarios, obteniendo \(p^{2}\) pruebas.
+
+Uno de los diseños que consigue este objetivo es el *diseño en cuadrado latino*.
+Un cuadrado latino de lado \(p\) es una matriz \(p \times p\) cuyos elementos son letras latinas repetidas \(p\) veces de modo que cada letra aparece exactamente una vez en cada fila y en cada columna.
+Dos ejemplos son:
+
+\[   \begin{matrix}
+   A & B & C & D & E\\
+   B & C & D & E & A\\
+   C & D & E & A & B\\
+   D & E & A & B & C\\
+   E & A & B & C & D
+  \end{matrix} \]
+
+\[   \begin{matrix}
+    A & B & C & D & E\\
+    C & D & E & A & B\\
+    E & A & B & C & D\\
+    B & C & D & E & A\\
+    D & E & A & B & C
+  \end{matrix} \]
+
+Para realizar un diseño en cuadrado latino se selecciona un cuadrado latino y se asignan de manera aleatoria los niveles de los factores secundarios con las filas y las columnas, y cada letra con los tratamientos del factor principal.
+
+El modelo es completamente aditivo.
+
+*** Diseño en cuadrado grecolatino
+Se pueden superponer dos cuadrados latinos notados con letras latinas y griegas respectivamente. Si estos cuadrados cumplen la propiedad de que cada letra latina coincide exactamente una vez con cada letra griega, se dice que los cuadrados son *ortogonales*. La superposición de dos cuadrados latinos ortogonales en estas condiciones se denomina *cuadrado grecolatino*, y permite eliminar 3 fuentes de variación.
+
+El análisis es similar al del diseño en cuadrado latino.
+
+Pueden incorporarse más cuadrados ortogonales a los anteriores, denóminandose *cuadrados hipergrecolatinos*. Los grados de libertad para el error son \((p-1)(p-1-\ell\)\) donde hay \(\ell\) cuadrados latinos.
+
+** TODO Diseño por bloques incompletos balanceado
+
+** TODO Diseño en cuadrado de Youden
+El diseño en cuadrado de Youden es un diseño análogo al diseño en cuadrado latino pero con bloques incompletos. Es un diseño en bloques incompletos balanceado simétrico en el que la posición de los niveles del tratamiento en cada bloque se identifica con los niveles del bloque con menor número de niveles.
+
+Un cuadrado de Youden es un cuadrado latino con una o más columnas (o filas) eliminadas. Hay que tener cuidado de que todos los tratamientos sean ensayados en cada nivel del bloque con más niveles y que en cada nivel del bloque pequeño los tratamientos sean ensayados una o ninguna vez, de modo que cada par de tratamientos aparezcan juntos el mismo número \(\lambda\) de veces, \(\lambda = r(r-1)/(t-1)\).
+
 * TODO Análisis de la covarianza
+
+Consideramos un modelo en el que, además de los niveles de los factores, contamos con variables cuantitativas linealmente relacionadas con \(Y\), que no están controladas por el experimentador pero pueden ser observadas junto con la respuesta. El modelo que describe el experimento es
+
+#+NAME: eq:ancova-modelo
+\begin{equation}
+\ev{Y} = X \beta + Z \gamma
+\end{equation}
+
+donde \(\beta\) es un vector de parámetros con los efectos de los factores y \(\gamma\) es un vector de parámetros con los coeficientes de regresión de las otras covariables.
+
+** Estimación
+
+Como el modelo ANCOVA no es más que un caso particular del modelo lineal general estudiado en el tema 2, para estimar los parámetros podríamos aplicar directamente el método de mínimos cuadrados
+
+\[\ev{Y} = X \beta + Z \gamma = \begin{pmatrix} X & Z \end{pmatrix} \begin{pmatrix} \beta \\ \gamma \end{pmatrix} = W \delta\]
+
+con \(\hat{\delta} = \left(W^t W \right)^{-} W^t Y\) y \(\var{\hat{\delta}} = \sigma^{2} \left(W^t W\right)^{-}\). Otra forma, que reduce la cantidad de cálculo, es el siguiente método.
+
+** Método de mínimos cuadrados en dos pasos
+
+1. En este método, primero se calculan los estimadores de mínimos cuadrados y la \(SC_{\varepsilon}\) del modelo ANOVA sin tener en cuenta las covariables:
+        \[\ev{Y} = X \beta\]
+
+    con \(\hat{\beta}_{(1)} = \left(X^t X \right)^{-} X^t Y\) y \(SC_{\varepsilon(1)} = Y^t R Y\), donde \(R = I_{n} - X \left(X^t X \right)^{-} X^t\).
+
+2. Para obtener \(\hat{\gamma}\), se reemplaza \(Y \mapsto Y - Z \gamma\) en la expresión de \(SC_{\varepsilon(1)}\) y a continuación se minimiza con respecto a \(\gamma\):
+    \begin{align*}
+  r &= \left(Y - Z\gamma\right)^{t} R \left(Y - Z\gamma)\\
+    &= Y^{t} R Y - Y^{t} R Z \gamma - \gamma^{t} Z^{t} R Y + \gamma^{t} Z^{t} R Z \gamma
+\end{align*}
+
+    El mínimo se alcanza en
+
+    \[ 0 = \frac{\partial}{\partial \gamma} r = -2 Z^t R Y + 2 Z^t R Z \gamma \]
+
+    Así que el estimador es
+        \[\hat{\gamma} = \left(Z^{t} R Z\right)^{-1} Z^{t} R Y\]
+
+3. Para obtener el estimador de mínimos cuadrados de \(\beta\) en el modelo completo, se reemplaza \(Y \mapsto Y - Z \hat{\gamma}\) en la expresión de \(\hat{\beta}_{(1)}\).
+
+    \[\hat{\beta} = \left(X^{t} X)^{-} X^{t} \left(Y - Z \hat{\gamma})\]
+
+4. La suma de cuadrados debida al error es el valor mínimo de \(r\):
+
+    \[SC_{\varepsilon} = \min r = \left(Y - Z \hat{\gamma})^{t} R \left(Y - Z \hat{\gamma})\]
+
+    con grados de libertad \(gl(SC_{\varepsilon}) = gl(SC_{\varepsilon(1)}) - \dim(\gamma)\).
+
+** Contrastes de hipótesis
+
+*** Igualdad de efectos de los tratamientos
+
+El contraste es \(H_{01} : \alpha_{1} = \dots = \alpha_{I}\). Bajo esta hipótesis nula, el modelo es
+\[ \ev{y_{ij} = \mu +  \gamma z_{ij} \]
+
+Aplicando el método de mínimos cuadrados en dos pasos para el modelo bajo la hipótesis nula, se obtiene que el estadístico \(F\) para el contraste es:
+
+\[ F = \frac{SC_{\varepsilon\ {01}} - SC_{\varepsilon}}{SC_{\varepsilon}} \frac{N-I-1}{I-1}\]
+
+donde \(SC_{\varepsilon\ {01}} = \min r = \sum_{i,j} \left( y_{ij} - \overline{y}_{\cdot \cdot} - \hat{\gamma}_{01}(z_{ij} - \overline{z}_{\cdot \cdot}) \right)^{2}\)
+
+*** Nulidad de los coeficientes de regresión
+
+El contraste es \(H_{02} : \gamma = 0\). Bajo la hipótesis nula, el modelo es
+\[\ev{y_{ij}} = \mu + \alpha_{i}\] y para este modelo \(SC_{\varepsilon\ {02}} = SC_{\varepsilon(1)} = \sum_{i,j} \left(y_{ij} - \overline{y}_{i \cdot}\right)^{2}\)
+
+Por tanto, el estadístico \(F\) es
+\[F = \frac{SC_{\varepsilon(1)} - SC_{\varepsilon}}{SC_{\varepsilon}} \frac{N-I-1}{1}\]
+
+
 
 * Bibliografía
 <<bibliographystyle link>>
